@@ -9,6 +9,7 @@ import {
 import {
   Default,
   Email,
+  Enum,
   Groups,
   Ignore,
   MaxLength,
@@ -21,6 +22,12 @@ import {
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
+
+enum Roles {
+  ADMIN = "admin",
+  SCHOOL = "school",
+  STUDENT = "student",
+}
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -49,12 +56,15 @@ export class User {
   @Trim()
   email: string;
 
-  @Groups("creation")
   @Property()
   @Required()
   @MinLength(4)
   @MaxLength(20)
   password: string;
+
+  @Enum(Roles)
+  @Default("student")
+  role: Roles;
 
   @Property()
   @Optional()
