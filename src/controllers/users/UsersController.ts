@@ -1,4 +1,5 @@
-import { BodyParams, Controller, Get, Post } from "@tsed/common";
+import { $log, BodyParams, Controller, Get, Post } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import {
   Description,
   Required,
@@ -27,6 +28,7 @@ export class UserController {
   async createUser(
     @Description("User model") @BodyParams() @Required() userObj: User
   ): Promise<User> {
+    $log.info(userObj);
     return this.usersService.save(userObj);
   }
 }

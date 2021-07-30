@@ -12,6 +12,12 @@ export class UsersService {
     return user;
   }
 
+  async findOne(opts = {}): Promise<User | null> {
+    const user = await this.user.findOne(opts).exec();
+    $log.debug("Found user", user);
+    return user;
+  }
+
   async save(userObj: User): Promise<User> {
     const user = new this.user(userObj);
     await user.save();
@@ -25,5 +31,9 @@ export class UsersService {
 
   async remove(id: string): Promise<User> {
     return await this.user.findById(id).remove().exec();
+  }
+
+  attachToken(user: User, token: string) {
+    user.token = token;
   }
 }

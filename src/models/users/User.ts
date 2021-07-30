@@ -36,7 +36,6 @@ export class User {
   _id: string;
 
   @Property()
-  @Required()
   @MinLength(3)
   @MaxLength(50)
   @Trim()
@@ -66,4 +65,12 @@ export class User {
   @Optional()
   @Default(true)
   isVerified: boolean;
+
+  token: string;
+
+  public async verifyPassword(pwd: string): Promise<boolean> {
+    const password = Buffer.from(pwd);
+    const isCorrect = await argon2i.verify(this.password, password);
+    return isCorrect;
+  }
 }
