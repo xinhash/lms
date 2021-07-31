@@ -11,7 +11,7 @@ import { User } from "src/models/users/User";
 import { UsersService } from "src/services/UsersService";
 
 @Controller("/users")
-export class UserController {
+export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get("/")
