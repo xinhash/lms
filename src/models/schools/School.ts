@@ -33,7 +33,7 @@ export class School {
   address: string; // use inline model
 
   @Enum("multi", "single")
-  @Default(true)
+  @Default("single")
   branch: string;
 
   @Property()
@@ -44,6 +44,6 @@ export class School {
   packagedId: number;
 
   @Enum("active", "inactive", "suspended", "blocked")
-  @Default(true)
+  @Default("active")
   status: string;
 }

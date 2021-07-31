@@ -11,7 +11,7 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { School } from "src/models/schools/School";
 import { SchoolsService } from "src/services/SchoolsService";
 
-@Controller("/users")
+@Controller("/schools")
 export class SchoolsController {
   constructor(private schoolsService: SchoolsService) {}
 
@@ -22,7 +22,7 @@ export class SchoolsController {
     return this.schoolsService.query();
   }
 
-  @Get("/{id}")
+  @Get("/:id")
   @Summary("Return school based on id")
   @Returns(200, School)
   async getSchool(@PathParams("id") id: string): Promise<School | null> {
@@ -39,6 +39,7 @@ export class SchoolsController {
   }
 
   @Put("/:id")
+  @Summary("Update school with id")
   @Status(201, { description: "Updated school", type: School })
   update(
     @PathParams("id") @Required() id: string,
