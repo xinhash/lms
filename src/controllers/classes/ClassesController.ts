@@ -9,36 +9,36 @@ import {
 } from "@tsed/common";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { Class } from "src/models/classes/Classes";
-import { SectionsService } from "src/services/ClassesService";
+import { ClassesService } from "src/services/ClassesService";
 
 @Controller("/Classes")
-export class SectionsController {
-  constructor(private sectionsService: SectionsService) {}
+export class ClassesController {
+  constructor(private classesService: ClassesService) {}
 
   @Get("/")
   @Summary("Return all Classes")
   @Returns(200, Class)
-  async getAllSections(): Promise<Class[]> {
-    return this.sectionsService.query();
+  async getAllClasses(): Promise<Class[]> {
+    return this.classesService.query();
   }
 
   @Get("/:id")
   @Summary("Return Class based on id")
   @Returns(200, Class)
-  async getSection(@PathParams("id") id: string): Promise<Class | null> {
-    return this.sectionsService.find(id);
+  async getClass(@PathParams("id") id: string): Promise<Class | null> {
+    return this.classesService.find(id);
   }
 
   @Post("/")
   @Summary("Create new Class")
   @Returns(201, Class)
-  async createSection(
+  async createClass(
     @Description("Class model")
     @BodyParams()
     @Required()
-    SectionObj: Class
+    ClassObj: Class
   ): Promise<Class> {
-    return this.sectionsService.save(SectionObj);
+    return this.classesService.save(ClassObj);
   }
 
   @Put("/:id")
@@ -48,13 +48,13 @@ export class SectionsController {
     @PathParams("id") @Required() id: string,
     @BodyParams() @Required() Class: Class
   ): Promise<Class | null> {
-    return this.sectionsService.update(id, Class);
+    return this.classesService.update(id, Class);
   }
 
   @Delete("/:id")
   @Summary("Remove a Class")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {
-    await this.sectionsService.remove(id);
+    await this.classesService.remove(id);
   }
 }

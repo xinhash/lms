@@ -3,7 +3,7 @@ import { MongooseModel } from "@tsed/mongoose";
 import { Class } from "src/models/classes/Classes";
 
 @Service()
-export class SectionsService {
+export class ClassesService {
   @Inject(Class) private Class: MongooseModel<Class>;
 
   async find(id: string): Promise<Class | null> {
