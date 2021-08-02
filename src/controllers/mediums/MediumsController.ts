@@ -12,7 +12,7 @@ import { Medium } from "src/models/mediums/Medium";
 import { MediumsService } from "src/services/MediumsService";
 
 @Controller("/Mediums")
-export class NationalitiesController {
+export class MediumsController {
   constructor(private mediumsService: MediumsService) {}
 
   @Get("/")
