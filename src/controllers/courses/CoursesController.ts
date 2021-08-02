@@ -18,7 +18,7 @@ export class CoursesController {
   @Get("/")
   @Summary("Return all Courses")
   @Returns(200, Course)
-  async getAllCategories(): Promise<Course[]> {
+  async getAllCourses(): Promise<Course[]> {
     return this.coursesService.query();
   }
 
