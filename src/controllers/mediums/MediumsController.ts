@@ -18,7 +18,7 @@ export class MediumsController {
   @Get("/")
   @Summary("Return all Mediums")
   @Returns(200, Medium)
-  async getAllCategories(): Promise<Medium[]> {
+  async getAllMediums(): Promise<Medium[]> {
     return this.mediumsService.query();
   }
 
