@@ -18,7 +18,7 @@ export class NationalitiesController {
   @Get("/")
   @Summary("Return all Castes")
   @Returns(200, Caste)
-  async getAllCategories(): Promise<Caste[]> {
+  async getAllCastes(): Promise<Caste[]> {
     return this.castesService.query();
   }
 
