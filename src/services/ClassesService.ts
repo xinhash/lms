@@ -12,20 +12,20 @@ export class ClassesService {
     return Class;
   }
 
-  async save(SectionObj: Class): Promise<Class> {
-    const Class = new this.Class(SectionObj);
+  async save(ClassObj: Class): Promise<Class> {
+    const Class = new this.Class(ClassObj);
     await Class.save();
     $log.debug("Saved Class", Class);
     return Class;
   }
 
-  async update(id: string, SectionObj: Class): Promise<Class | null> {
+  async update(id: string, ClassObj: Class): Promise<Class | null> {
     const Class = await this.Class.findById(id).exec();
     if (Class) {
-      Class.name = SectionObj.name;
-      Class.status = SectionObj.status;
-      Class.courseId = SectionObj.courseId;
-      Class.sectionIds = SectionObj.sectionIds;
+      Class.name = ClassObj.name;
+      Class.status = ClassObj.status;
+      Class.courseId = ClassObj.courseId;
+      Class.sectionIds = ClassObj.sectionIds;
       await Class.save();
       $log.debug("Updated Class", Class);
       return Class;
