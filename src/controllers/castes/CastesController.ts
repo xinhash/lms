@@ -12,7 +12,7 @@ import { Caste } from "src/models/castes/Caste";
 import { CastesService } from "src/services/CastesService";
 
 @Controller("/Castes")
-export class NationalitiesController {
+export class CastesController {
   constructor(private castesService: CastesService) {}
 
   @Get("/")
