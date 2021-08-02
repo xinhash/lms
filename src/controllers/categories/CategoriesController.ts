@@ -23,33 +23,36 @@ export class CategoriesController {
   }
 
   @Get("/:id")
-  @Summary("Return school based on id")
+  @Summary("Return category based on id")
   @Returns(200, Category)
   async getCategory(@PathParams("id") id: string): Promise<Category | null> {
     return this.categoriesService.find(id);
   }
 
   @Post("/")
-  @Summary("Create new school")
+  @Summary("Create new category")
   @Returns(201, Category)
   async createCategory(
-    @Description("Category model") @BodyParams() @Required() schoolObj: Category
+    @Description("Category model")
+    @BodyParams()
+    @Required()
+    categoryObj: Category
   ): Promise<Category> {
-    return this.categoriesService.save(schoolObj);
+    return this.categoriesService.save(categoryObj);
   }
 
   @Put("/:id")
-  @Summary("Update school with id")
-  @Status(201, { description: "Updated school", type: Category })
+  @Summary("Update category with id")
+  @Status(201, { description: "Updated category", type: Category })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() school: Category
+    @BodyParams() @Required() category: Category
   ): Promise<Category | null> {
-    return this.categoriesService.update(id, school);
+    return this.categoriesService.update(id, category);
   }
 
   @Delete("/:id")
-  @Summary("Remove a school")
+  @Summary("Remove a category")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {
     await this.categoriesService.remove(id);
