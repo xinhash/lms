@@ -11,8 +11,8 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { House } from "src/models/houses/House";
 import { HousesService } from "src/services/HousesService";
 
-@Controller("/Houses")
-export class NationalitiesController {
+@Controller("/houses")
+export class HousesController {
   constructor(private housesService: HousesService) {}
 
   @Get("/")
