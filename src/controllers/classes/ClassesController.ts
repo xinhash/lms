@@ -11,7 +11,7 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { Class } from "src/models/classes/Classes";
 import { ClassesService } from "src/services/ClassesService";
 
-@Controller("/Classes")
+@Controller("/classes")
 export class ClassesController {
   constructor(private classesService: ClassesService) {}
 

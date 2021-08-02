@@ -11,7 +11,7 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { Medium } from "src/models/mediums/Medium";
 import { MediumsService } from "src/services/MediumsService";
 
-@Controller("/Mediums")
+@Controller("/mediums")
 export class MediumsController {
   constructor(private mediumsService: MediumsService) {}
 

@@ -11,7 +11,7 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { Section } from "src/models/sections/Section";
 import { SectionsService } from "src/services/SectionsService";
 
-@Controller("/Sections")
+@Controller("/sections")
 export class SectionsController {
   constructor(private sectionsService: SectionsService) {}
 

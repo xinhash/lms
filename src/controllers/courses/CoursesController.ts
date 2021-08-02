@@ -11,7 +11,7 @@ import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { Course } from "src/models/courses/Course";
 import { CoursesService } from "src/services/CoursesService";
 
-@Controller("/Courses")
+@Controller("/courses")
 export class CoursesController {
   constructor(private coursesService: CoursesService) {}
 
