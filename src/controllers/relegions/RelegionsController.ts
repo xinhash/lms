@@ -18,7 +18,7 @@ export class NationalitiesController {
   @Get("/")
   @Summary("Return all religions")
   @Returns(200, Religion)
-  async getAllCategories(): Promise<Religion[]> {
+  async getAllReligion(): Promise<Religion[]> {
     return this.religionsService.query();
   }
 
