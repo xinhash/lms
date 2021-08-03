@@ -36,9 +36,9 @@ export class MediumsController {
     @Description("Medium model")
     @BodyParams()
     @Required()
-    MediumObj: Medium
+    mediumObj: Medium
   ): Promise<Medium> {
-    return this.mediumsService.save(MediumObj);
+    return this.mediumsService.save(mediumObj);
   }
 
   @Put("/:id")

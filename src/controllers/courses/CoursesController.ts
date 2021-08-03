@@ -36,9 +36,9 @@ export class CoursesController {
     @Description("Course model")
     @BodyParams()
     @Required()
-    CourseObj: Course
+    courseObj: Course
   ): Promise<Course> {
-    return this.coursesService.save(CourseObj);
+    return this.coursesService.save(courseObj);
   }
 
   @Put("/:id")

@@ -36,9 +36,9 @@ export class HousesController {
     @Description("House model")
     @BodyParams()
     @Required()
-    HouseObj: House
+    houseObj: House
   ): Promise<House> {
-    return this.housesService.save(HouseObj);
+    return this.housesService.save(houseObj);
   }
 
   @Put("/:id")

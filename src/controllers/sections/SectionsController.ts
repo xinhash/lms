@@ -36,9 +36,9 @@ export class SectionsController {
     @Description("Section model")
     @BodyParams()
     @Required()
-    SectionObj: Section
+    sectionObj: Section
   ): Promise<Section> {
-    return this.sectionsService.save(SectionObj);
+    return this.sectionsService.save(sectionObj);
   }
 
   @Put("/:id")

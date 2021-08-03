@@ -12,18 +12,18 @@ export class MediumsService {
     return Medium;
   }
 
-  async save(MediumObj: Medium): Promise<Medium> {
-    const Medium = new this.Medium(MediumObj);
+  async save(mediumObj: Medium): Promise<Medium> {
+    const Medium = new this.Medium(mediumObj);
     await Medium.save();
     $log.debug("Saved Medium", Medium);
     return Medium;
   }
 
-  async update(id: string, MediumObj: Medium): Promise<Medium | null> {
+  async update(id: string, mediumObj: Medium): Promise<Medium | null> {
     const Medium = await this.Medium.findById(id).exec();
     if (Medium) {
-      Medium.name = MediumObj.name;
-      Medium.status = MediumObj.status;
+      Medium.name = mediumObj.name;
+      Medium.status = mediumObj.status;
 
       await Medium.save();
       $log.debug("Updated Medium", Medium);
