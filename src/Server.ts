@@ -1,5 +1,6 @@
-import {Configuration, Inject} from "@tsed/di";
-import {PlatformApplication} from "@tsed/common";
+import { Configuration, Inject } from "@tsed/di";
+import { PlatformApplication } from "@tsed/common";
+import "@tsed/passport";
 import "@tsed/platform-express"; // /!\ keep this import
 import bodyParser from "body-parser";
 import compress from "compression";
@@ -9,8 +10,9 @@ import cors from "cors";
 import "@tsed/ajv";
 import "@tsed/swagger";
 import "@tsed/mongoose";
-import {config, rootDir} from "./config";
-import {IndexCtrl} from "./controllers/pages/IndexController";
+import { config, rootDir } from "./config";
+import { IndexCtrl } from "./controllers/pages/IndexController";
+import { User } from "./models/users/User";
 
 @Configuration({
   ...config,
@@ -18,28 +20,31 @@ import {IndexCtrl} from "./controllers/pages/IndexController";
   httpPort: process.env.PORT || 8083,
   httpsPort: false, // CHANGE
   mount: {
-    "/rest": [
-      `${rootDir}/controllers/**/*.ts`
-    ],
-    "/": [IndexCtrl]
+    "/api/v1": [`${rootDir}/controllers/**/*.ts`],
+    "/": [IndexCtrl],
   },
+  componentsScan: [
+    `${rootDir}/middlewares/*.ts`, // scan protocols directory
+    `${rootDir}/protocols/*.ts`, // scan protocols directory
+  ],
   swagger: [
     {
       path: "/v2/docs",
-      specVersion: "2.0"
+      specVersion: "2.0",
     },
     {
       path: "/v3/docs",
-      specVersion: "3.0.1"
-    }
+      specVersion: "3.0.1",
+    },
   ],
   views: {
     root: `${rootDir}/../views`,
-    viewEngine: "ejs"
+    viewEngine: "ejs",
   },
-  exclude: [
-    "**/*.spec.ts"
-  ]
+  exclude: ["**/*.spec.ts"],
+  passport: {
+    userInfoModel: User,
+  },
 })
 export class Server {
   @Inject()
@@ -55,8 +60,10 @@ export class Server {
       .use(compress({}))
       .use(methodOverride())
       .use(bodyParser.json())
-      .use(bodyParser.urlencoded({
-        extended: true
-      }));
+      .use(
+        bodyParser.urlencoded({
+          extended: true,
+        })
+      ); // @ts-ignore
   }
 }

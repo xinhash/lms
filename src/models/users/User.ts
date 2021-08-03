@@ -9,6 +9,7 @@ import {
 import {
   Default,
   Email,
+  Enum,
   Groups,
   Ignore,
   MaxLength,
@@ -21,6 +22,12 @@ import {
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
+
+enum Roles {
+  ADMIN = "admin",
+  SCHOOL = "school",
+  STUDENT = "student",
+}
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -36,7 +43,6 @@ export class User {
   _id: string;
 
   @Property()
-  @Required()
   @MinLength(3)
   @MaxLength(50)
   @Trim()
@@ -50,12 +56,16 @@ export class User {
   @Trim()
   email: string;
 
-  @Groups("creation")
   @Property()
   @Required()
   @MinLength(4)
   @MaxLength(20)
   password: string;
+
+  @Property()
+  @Enum(Roles)
+  @Default("student")
+  role: Roles;
 
   @Property()
   @Optional()
@@ -66,4 +76,12 @@ export class User {
   @Optional()
   @Default(true)
   isVerified: boolean;
+
+  token: string;
+
+  public async verifyPassword(pwd: string): Promise<boolean> {
+    const password = Buffer.from(pwd);
+    const isCorrect = await argon2i.verify(this.password, password);
+    return isCorrect;
+  }
 }
