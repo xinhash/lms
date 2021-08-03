@@ -62,6 +62,7 @@ export class User {
   @MaxLength(20)
   password: string;
 
+  @Property()
   @Enum(Roles)
   @Default("student")
   role: Roles;

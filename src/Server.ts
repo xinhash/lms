@@ -24,6 +24,7 @@ import { User } from "./models/users/User";
     "/": [IndexCtrl],
   },
   componentsScan: [
+    `${rootDir}/middlewares/*.ts`, // scan protocols directory
     `${rootDir}/protocols/*.ts`, // scan protocols directory
   ],
   swagger: [
