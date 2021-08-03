@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Religion } from "src/models/religions/Religion";
 import { ReligionsService } from "src/services/ReligionsService";
 
@@ -16,6 +18,8 @@ export class ReligionsController {
   constructor(private religionsService: ReligionsService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all religions")
   @Returns(200, Religion)
   async getAllReligion(): Promise<Religion[]> {
@@ -23,6 +27,8 @@ export class ReligionsController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return religion based on id")
   @Returns(200, Religion)
   async getReligion(@PathParams("id") id: string): Promise<Religion | null> {
@@ -30,6 +36,8 @@ export class ReligionsController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new religion")
   @Returns(201, Religion)
   async createReligion(
@@ -41,7 +49,9 @@ export class ReligionsController {
     return this.religionsService.save(religionObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update religion with id")
   @Status(201, { description: "Updated religion", type: Religion })
   update(
@@ -52,6 +62,8 @@ export class ReligionsController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a religion")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

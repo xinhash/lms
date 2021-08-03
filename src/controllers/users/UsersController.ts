@@ -8,6 +8,7 @@ import {
   Summary,
   Groups,
 } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { User } from "src/models/users/User";
 import { UsersService } from "src/services/UsersService";
 
@@ -16,6 +17,8 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all users")
   @(Returns(200, User).Groups("group.*"))
   async getAllUsers(): Promise<User[]> {
@@ -23,6 +26,8 @@ export class UsersController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new user")
   @(Returns(201, User).Groups("group.*"))
   async createUser(

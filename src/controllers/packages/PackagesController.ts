@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Package } from "src/models/packages/Package";
 import { PackagesService } from "src/services/PackagesService";
 
@@ -16,6 +18,8 @@ export class CastesController {
   constructor(private packagesService: PackagesService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all Packages")
   @Returns(200, Package)
   async getAllCastes(): Promise<Package[]> {
@@ -23,6 +27,8 @@ export class CastesController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return Package based on id")
   @Returns(200, Package)
   async getCaste(@PathParams("id") id: string): Promise<Package | null> {
@@ -30,6 +36,8 @@ export class CastesController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new Package")
   @Returns(201, Package)
   async createCaste(
@@ -41,7 +49,9 @@ export class CastesController {
     return this.packagesService.save(packagesObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update Package with id")
   @Status(201, { description: "Updated Package", type: Package })
   update(
@@ -52,6 +62,8 @@ export class CastesController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a Package")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

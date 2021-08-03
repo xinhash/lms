@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Category } from "src/models/categories/Category";
 import { CategoriesService } from "src/services/CategoriesService";
 
@@ -16,6 +18,8 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all categories")
   @Returns(200, Category)
   async getAllCategories(): Promise<Category[]> {
@@ -23,6 +27,8 @@ export class CategoriesController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return category based on id")
   @Returns(200, Category)
   async getCategory(@PathParams("id") id: string): Promise<Category | null> {
@@ -30,6 +36,8 @@ export class CategoriesController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new category")
   @Returns(201, Category)
   async createCategory(
@@ -41,7 +49,9 @@ export class CategoriesController {
     return this.categoriesService.save(categoryObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update category with id")
   @Status(201, { description: "Updated category", type: Category })
   update(
@@ -52,6 +62,8 @@ export class CategoriesController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a category")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

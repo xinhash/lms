@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { House } from "src/models/houses/House";
 import { HousesService } from "src/services/HousesService";
 
@@ -16,6 +18,8 @@ export class HousesController {
   constructor(private housesService: HousesService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all Houses")
   @Returns(200, House)
   async getAllHouses(): Promise<House[]> {
@@ -23,6 +27,8 @@ export class HousesController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return House based on id")
   @Returns(200, House)
   async getHouse(@PathParams("id") id: string): Promise<House | null> {
@@ -30,6 +36,8 @@ export class HousesController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new House")
   @Returns(201, House)
   async createHouse(
@@ -41,7 +49,9 @@ export class HousesController {
     return this.housesService.save(houseObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update House with id")
   @Status(201, { description: "Updated House", type: House })
   update(
@@ -52,6 +62,8 @@ export class HousesController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a House")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

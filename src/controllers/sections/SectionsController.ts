@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Section } from "src/models/sections/Section";
 import { SectionsService } from "src/services/SectionsService";
 
@@ -16,6 +18,8 @@ export class SectionsController {
   constructor(private sectionsService: SectionsService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all Sections")
   @Returns(200, Section)
   async getAllSections(): Promise<Section[]> {
@@ -23,6 +27,8 @@ export class SectionsController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return Section based on id")
   @Returns(200, Section)
   async getSection(@PathParams("id") id: string): Promise<Section | null> {
@@ -30,6 +36,8 @@ export class SectionsController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new Section")
   @Returns(201, Section)
   async createSection(
@@ -41,7 +49,9 @@ export class SectionsController {
     return this.sectionsService.save(sectionObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update Section with id")
   @Status(201, { description: "Updated Section", type: Section })
   update(
@@ -52,6 +62,8 @@ export class SectionsController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a Section")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

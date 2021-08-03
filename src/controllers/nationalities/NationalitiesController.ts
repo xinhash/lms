@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Nationality } from "src/models/nationalities/Nationality";
 import { NationalitiesService } from "src/services/NationalitiesService";
 
@@ -16,6 +18,8 @@ export class NationalitiesController {
   constructor(private nationalitiesService: NationalitiesService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all nationalities")
   @Returns(200, Nationality)
   async getAllNationalities(): Promise<Nationality[]> {
@@ -23,6 +27,8 @@ export class NationalitiesController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return nationality based on id")
   @Returns(200, Nationality)
   async getNationality(
@@ -32,6 +38,8 @@ export class NationalitiesController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new nationality")
   @Returns(201, Nationality)
   async createNationality(
@@ -43,7 +51,9 @@ export class NationalitiesController {
     return this.nationalitiesService.save(nationalityObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update nationality with id")
   @Status(201, { description: "Updated nationality", type: Nationality })
   update(
@@ -54,6 +64,8 @@ export class NationalitiesController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a nationality")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {

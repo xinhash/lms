@@ -7,7 +7,9 @@ import {
   Post,
   Put,
 } from "@tsed/common";
+import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { School } from "src/models/schools/School";
 import { SchoolsService } from "src/services/SchoolsService";
 
@@ -16,6 +18,8 @@ export class SchoolsController {
   constructor(private schoolsService: SchoolsService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return all schools")
   @Returns(200, School)
   async getAllSchools(): Promise<School[]> {
@@ -23,6 +27,8 @@ export class SchoolsController {
   }
 
   @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Return school based on id")
   @Returns(200, School)
   async getSchool(@PathParams("id") id: string): Promise<School | null> {
@@ -30,6 +36,8 @@ export class SchoolsController {
   }
 
   @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Create new school")
   @Returns(201, School)
   async createSchool(
@@ -38,7 +46,9 @@ export class SchoolsController {
     return this.schoolsService.save(schoolObj);
   }
 
-  @Put("/:id")
+  @Post("/")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Update school with id")
   @Status(201, { description: "Updated school", type: School })
   update(
@@ -49,6 +59,8 @@ export class SchoolsController {
   }
 
   @Delete("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
   @Summary("Remove a school")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {
