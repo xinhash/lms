@@ -12,20 +12,20 @@ export class SectionsService {
     return Section;
   }
 
-  async save(SectionObj: Section): Promise<Section> {
-    const Section = new this.Section(SectionObj);
+  async save(sectionObj: Section): Promise<Section> {
+    const Section = new this.Section(sectionObj);
     await Section.save();
     $log.debug("Saved Section", Section);
     return Section;
   }
 
-  async update(id: string, SectionObj: Section): Promise<Section | null> {
+  async update(id: string, sectionObj: Section): Promise<Section | null> {
     const Section = await this.Section.findById(id).exec();
     if (Section) {
-      Section.name = SectionObj.name;
-      Section.status = SectionObj.status;
-      Section.mediumId = SectionObj.mediumId;
-      Section.noOfStudents = SectionObj.noOfStudents;
+      Section.name = sectionObj.name;
+      Section.status = sectionObj.status;
+      Section.mediumId = sectionObj.mediumId;
+      Section.noOfStudents = sectionObj.noOfStudents;
       await Section.save();
       $log.debug("Updated Section", Section);
       return Section;

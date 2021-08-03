@@ -36,9 +36,9 @@ export class CastesController {
     @Description("Caste model")
     @BodyParams()
     @Required()
-    CasteObj: Caste
+    casteObj: Caste
   ): Promise<Caste> {
-    return this.castesService.save(CasteObj);
+    return this.castesService.save(casteObj);
   }
 
   @Put("/:id")

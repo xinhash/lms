@@ -12,19 +12,19 @@ export class HousesService {
     return House;
   }
 
-  async save(HouseObj: House): Promise<House> {
-    const House = new this.House(HouseObj);
+  async save(houseObj: House): Promise<House> {
+    const House = new this.House(houseObj);
     await House.save();
     $log.debug("Saved House", House);
     return House;
   }
 
-  async update(id: string, HouseObj: House): Promise<House | null> {
+  async update(id: string, houseObj: House): Promise<House | null> {
     const House = await this.House.findById(id).exec();
     if (House) {
-      House.name = HouseObj.name;
-      House.description = HouseObj.description;
-      House.status = HouseObj.status;
+      House.name = houseObj.name;
+      House.description = houseObj.description;
+      House.status = houseObj.status;
 
       await House.save();
       $log.debug("Updated House", House);

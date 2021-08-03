@@ -12,18 +12,18 @@ export class CoursesService {
     return Course;
   }
 
-  async save(CourseObj: Course): Promise<Course> {
-    const Course = new this.Course(CourseObj);
+  async save(courseObj: Course): Promise<Course> {
+    const Course = new this.Course(courseObj);
     await Course.save();
     $log.debug("Saved Course", Course);
     return Course;
   }
 
-  async update(id: string, CourseObj: Course): Promise<Course | null> {
+  async update(id: string, courseObj: Course): Promise<Course | null> {
     const Course = await this.Course.findById(id).exec();
     if (Course) {
-      Course.name = CourseObj.name;
-      Course.status = CourseObj.status;
+      Course.name = courseObj.name;
+      Course.status = courseObj.status;
 
       await Course.save();
       $log.debug("Updated Course", Course);
