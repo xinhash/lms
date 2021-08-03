@@ -24,7 +24,6 @@ export class SignupLocalProtocol implements OnVerify, OnInstall {
       throw new Forbidden("Email is already registered");
     }
     user.username = request.body.username;
-    console.log(user);
     return this.usersService.save(user);
   }
 
