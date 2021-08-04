@@ -34,6 +34,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "method-override": "^3.0.0",
+    "module-alias": "^2.2.2",
     "mongoose": "^5.13.4",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -70,5 +71,8 @@
   "tsed": {
     "packageManager": "yarn",
     "convention": "default"
+  },
+  "_moduleAliases": {
+    "src": "dist/"
   }
 }
