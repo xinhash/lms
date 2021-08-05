@@ -1,13 +1,6 @@
 import { $log, BodyParams, Controller, Get, Post } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import {
-  Description,
-  Required,
-  Returns,
-  Status,
-  Summary,
-  Groups,
-} from "@tsed/schema";
+import { Description, Required, Returns, Summary, Groups } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { User } from "src/models/users/User";
 import { UsersService } from "src/services/UsersService";
@@ -20,7 +13,7 @@ export class UsersController {
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all users")
-  @(Returns(200, User).Groups("group.*"))
+  @Returns(200, User)
   async getAllUsers(): Promise<User[]> {
     return this.usersService.query();
   }
@@ -29,9 +22,13 @@ export class UsersController {
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new user")
-  @(Returns(201, User).Groups("group.*"))
+  @Returns(201, User)
   async createUser(
-    @Description("User model") @BodyParams() @Required() userObj: User
+    @Description("User model")
+    @BodyParams()
+    @Groups("creation")
+    @Required()
+    userObj: User
   ): Promise<User> {
     $log.info(userObj);
     return this.usersService.save(userObj);

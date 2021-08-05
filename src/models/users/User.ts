@@ -24,8 +24,9 @@ import crypto from "crypto";
 import util from "util";
 
 enum Roles {
+  SUPERADMIN = "superadmin",
   ADMIN = "admin",
-  SCHOOL = "school",
+  TEACHER = "teacher",
   STUDENT = "student",
 }
 
@@ -42,13 +43,11 @@ export class User {
   @ObjectID("id")
   _id: string;
 
-  @Property()
   @MinLength(3)
   @MaxLength(50)
   @Trim()
   username: string;
 
-  @Property()
   @Indexed()
   @Required()
   @Email()
@@ -56,23 +55,20 @@ export class User {
   @Trim()
   email: string;
 
-  @Property()
+  @Groups("creation")
   @Required()
   @MinLength(4)
   @MaxLength(20)
   password: string;
 
-  @Property()
   @Enum(Roles)
-  @Default("student")
+  @Default("admin")
   role: Roles;
 
-  @Property()
   @Optional()
   @Default(true)
   isActive: boolean;
 
-  @Property()
   @Optional()
   @Default(true)
   isVerified: boolean;

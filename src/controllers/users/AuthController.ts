@@ -9,7 +9,7 @@ import {
   Scope,
 } from "@tsed/common";
 import { Authenticate, Authorize } from "@tsed/passport";
-import { Returns } from "@tsed/schema";
+import { Groups, Returns } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { User } from "src/models/users/User";
 
@@ -37,7 +37,7 @@ export class AuthController {
   @Post("/signup")
   @Returns(201, User)
   @Authenticate("signup")
-  signup(@Req() req: Req, @BodyParams() user: User) {
+  signup(@Req() req: Req, @BodyParams() @Groups("creation") user: User) {
     return req.user;
   }
 

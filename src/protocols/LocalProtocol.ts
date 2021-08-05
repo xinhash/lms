@@ -25,12 +25,11 @@ export class LocalProtocol implements OnVerify {
     const { email, password } = credentials;
 
     const user = await this.usersService.findOne({ email });
-
     if (!user) {
       throw new Unauthorized("Wrong credentials");
     }
-
-    if (!user.verifyPassword(password)) {
+    const passwordMatched = await user.verifyPassword(password);
+    if (!passwordMatched) {
       throw new Unauthorized("Wrong credentials");
     }
 
