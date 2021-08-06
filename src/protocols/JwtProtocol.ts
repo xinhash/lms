@@ -24,6 +24,7 @@ export class JwtProtocol implements OnVerify {
     if (!user) {
       throw new Unauthorized("Wrong token");
     }
+    user.password = "";
     req.user = user;
 
     return user;

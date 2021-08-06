@@ -1,6 +1,7 @@
 import { BodyParams, Constant, Inject, Req } from "@tsed/common";
 import { Unauthorized } from "@tsed/exceptions";
 import { OnVerify, Protocol } from "@tsed/passport";
+import { Groups } from "@tsed/schema";
 import * as jwt from "jsonwebtoken";
 import { IStrategyOptions, Strategy } from "passport-local";
 import { User } from "src/models/users/User";
@@ -21,7 +22,10 @@ export class LocalProtocol implements OnVerify {
   @Constant("passport.protocols.jwt.settings")
   jwtSettings: any;
 
-  async $onVerify(@Req() request: Req, @BodyParams() credentials: User) {
+  async $onVerify(
+    @Req() request: Req,
+    @BodyParams() @Groups("login") credentials: User
+  ) {
     const { email, password } = credentials;
 
     const user = await this.usersService.findOne({ email });
@@ -36,10 +40,6 @@ export class LocalProtocol implements OnVerify {
     const token = this.createJwt(user);
 
     this.usersService.attachToken(user, token);
-    //     const response = {
-    //       token,
-    //     };
-    //     console.log(response);
     return { token: user.token };
   }
 

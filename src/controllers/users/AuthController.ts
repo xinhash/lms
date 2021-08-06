@@ -37,7 +37,7 @@ export class AuthController {
   @Post("/signup")
   @Returns(201, User)
   @Authenticate("signup")
-  signup(@Req() req: Req, @BodyParams() @Groups("creation") user: User) {
+  signup(@Req() req: Req, @BodyParams() user: User) {
     return req.user;
   }
 

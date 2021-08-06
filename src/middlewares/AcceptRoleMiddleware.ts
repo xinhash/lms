@@ -1,4 +1,4 @@
-import { EndpointInfo, Middleware, Req } from "@tsed/common";
+import { $log, EndpointInfo, Middleware, Req } from "@tsed/common";
 import { Unauthorized } from "@tsed/exceptions";
 
 @Middleware()
@@ -6,6 +6,7 @@ export class AcceptRolesMiddleware {
   use(@Req() request: Req, @EndpointInfo() endpoint: EndpointInfo) {
     if (request.user && request.isAuthenticated()) {
       let roles = endpoint.get(AcceptRolesMiddleware);
+      $log.debug(roles);
       if (!roles.includes("superadmin")) {
         roles = [...new Set([...roles, "superadmin"])];
       }

@@ -52,7 +52,7 @@ export class User {
   @Trim()
   email: string;
 
-  @Groups("creation")
+  @Groups("creation", "login")
   @Required()
   @MinLength(4)
   @MaxLength(20)
