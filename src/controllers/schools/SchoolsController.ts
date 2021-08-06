@@ -41,12 +41,12 @@ export class SchoolsController {
   @Summary("Create new school")
   @Returns(201, School)
   async createSchool(
-    @Description("School model") @BodyParams() @Required() schoolObj: School
+    @Description("School model") @BodyParams() @Required() data: School
   ): Promise<School> {
-    return this.schoolsService.save(schoolObj);
+    return this.schoolsService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update school with id")

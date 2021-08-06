@@ -1,4 +1,4 @@
-import { $log, BodyParams, Controller, Get, Post } from "@tsed/common";
+import { BodyParams, Controller, Get, Post } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Summary, Groups } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
@@ -11,7 +11,6 @@ export class UsersController {
 
   @Get("/")
   @Authorize("jwt")
-  @AcceptRoles("admin")
   @Summary("Return all users")
   @Returns(200, User)
   async getAllUsers(): Promise<User[]> {
@@ -28,9 +27,8 @@ export class UsersController {
     @BodyParams()
     @Groups("creation")
     @Required()
-    userObj: User
+    data: User
   ): Promise<User> {
-    $log.info(userObj);
-    return this.usersService.save(userObj);
+    return this.usersService.save(data);
   }
 }

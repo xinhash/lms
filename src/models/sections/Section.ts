@@ -10,6 +10,7 @@ import {
   Required,
 } from "@tsed/schema";
 import { Medium } from "../mediums/Medium";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Section {
@@ -36,4 +37,8 @@ export class Section {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Property()
+  @Required()
+  createdBy: User;
 }

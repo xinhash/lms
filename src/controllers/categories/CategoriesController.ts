@@ -44,12 +44,12 @@ export class CategoriesController {
     @Description("Category model")
     @BodyParams()
     @Required()
-    categoryObj: Category
+    data: Category
   ): Promise<Category> {
-    return this.categoriesService.save(categoryObj);
+    return this.categoriesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update category with id")

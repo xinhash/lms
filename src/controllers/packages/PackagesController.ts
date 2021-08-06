@@ -44,12 +44,12 @@ export class CastesController {
     @Description("Package model")
     @BodyParams()
     @Required()
-    packagesObj: Package
+    data: Package
   ): Promise<Package> {
-    return this.packagesService.save(packagesObj);
+    return this.packagesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Package with id")

@@ -44,12 +44,12 @@ export class ClassesController {
     @Description("Class model")
     @BodyParams()
     @Required()
-    classObj: Class
+    data: Class
   ): Promise<Class> {
-    return this.classesService.save(classObj);
+    return this.classesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Class with id")

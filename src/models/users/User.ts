@@ -11,12 +11,9 @@ import {
   Email,
   Enum,
   Groups,
-  Ignore,
   MaxLength,
   MinLength,
   Optional,
-  Pattern,
-  Property,
   Required,
 } from "@tsed/schema";
 import { argon2i } from "argon2-ffi";

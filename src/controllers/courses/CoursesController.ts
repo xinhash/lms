@@ -44,12 +44,12 @@ export class CoursesController {
     @Description("Course model")
     @BodyParams()
     @Required()
-    courseObj: Course
+    data: Course
   ): Promise<Course> {
-    return this.coursesService.save(courseObj);
+    return this.coursesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Course with id")

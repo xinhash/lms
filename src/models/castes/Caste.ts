@@ -8,6 +8,7 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Caste {
@@ -26,4 +27,8 @@ export class Caste {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @ObjectID()
+  @Required()
+  createdBy: User;
 }

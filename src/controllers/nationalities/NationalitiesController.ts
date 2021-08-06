@@ -46,12 +46,12 @@ export class NationalitiesController {
     @Description("Nationality model")
     @BodyParams()
     @Required()
-    nationalityObj: Nationality
+    data: Nationality
   ): Promise<Nationality> {
-    return this.nationalitiesService.save(nationalityObj);
+    return this.nationalitiesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update nationality with id")

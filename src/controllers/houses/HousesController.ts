@@ -44,12 +44,12 @@ export class HousesController {
     @Description("House model")
     @BodyParams()
     @Required()
-    houseObj: House
+    data: House
   ): Promise<House> {
-    return this.housesService.save(houseObj);
+    return this.housesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update House with id")

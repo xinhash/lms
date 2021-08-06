@@ -44,12 +44,12 @@ export class CastesController {
     @Description("Caste model")
     @BodyParams()
     @Required()
-    casteObj: Caste
+    data: Caste
   ): Promise<Caste> {
-    return this.castesService.save(casteObj);
+    return this.castesService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Caste with id")

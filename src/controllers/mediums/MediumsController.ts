@@ -44,12 +44,12 @@ export class MediumsController {
     @Description("Medium model")
     @BodyParams()
     @Required()
-    mediumObj: Medium
+    data: Medium
   ): Promise<Medium> {
-    return this.mediumsService.save(mediumObj);
+    return this.mediumsService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Medium with id")

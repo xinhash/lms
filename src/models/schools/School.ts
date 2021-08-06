@@ -10,6 +10,7 @@ import {
   Required,
 } from "@tsed/schema";
 import { Package } from "../packages/Package";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class School {
@@ -41,8 +42,13 @@ export class School {
   @Default(false)
   isMainBranch: boolean;
 
-  @Property(() => Package)
+  @Property()
+  @Required()
   packagedId: Package;
+
+  @Property()
+  @Required()
+  createdBy: User;
 
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")

@@ -44,12 +44,12 @@ export class ReligionsController {
     @Description("Religion model")
     @BodyParams()
     @Required()
-    religionObj: Religion
+    data: Religion
   ): Promise<Religion> {
-    return this.religionsService.save(religionObj);
+    return this.religionsService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update religion with id")

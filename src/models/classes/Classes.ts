@@ -12,6 +12,7 @@ import {
 } from "@tsed/schema";
 import { Course } from "../courses/Course";
 import { Section } from "../sections/Section";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Class {
@@ -37,4 +38,8 @@ export class Class {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Property()
+  @Required()
+  createdBy: User;
 }

@@ -44,12 +44,12 @@ export class SectionsController {
     @Description("Section model")
     @BodyParams()
     @Required()
-    sectionObj: Section
+    data: Section
   ): Promise<Section> {
-    return this.sectionsService.save(sectionObj);
+    return this.sectionsService.save(data);
   }
 
-  @Post("/")
+  @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Section with id")
