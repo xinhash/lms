@@ -1,4 +1,5 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { accessibleRecordsPlugin } from "@casl/mongoose";
+import { Model, MongoosePlugin, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   CollectionOf,
   Default,
@@ -15,7 +16,8 @@ import { Section } from "../sections/Section";
 import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
-export class Class {
+@MongoosePlugin(accessibleRecordsPlugin)
+export class Grade {
   @Groups("!creation")
   @ObjectID("id")
   _id: string;
@@ -39,7 +41,6 @@ export class Class {
   @Default("active")
   status: string;
 
-  @Property()
-  @Required()
-  createdBy: User;
+  @Ref(User)
+  createdBy: Ref<User>;
 }

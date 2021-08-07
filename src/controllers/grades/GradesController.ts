@@ -10,61 +10,61 @@ import {
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
-import { Class } from "src/models/classes/Classes";
-import { ClassesService } from "src/services/ClassesService";
+import { Grade } from "src/models/grades/Grades";
+import { GradesService } from "src/services/GradesService";
 
-@Controller("/classes")
-export class ClassesController {
-  constructor(private classesService: ClassesService) {}
+@Controller("/grades")
+export class GradesController {
+  constructor(private classesService: GradesService) {}
 
   @Get("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Return all Classes")
-  @Returns(200, Class)
-  async getAllClasses(): Promise<Class[]> {
+  @Summary("Return all Grades")
+  @Returns(200, Grade)
+  async getAllGrades(): Promise<Grade[]> {
     return this.classesService.query();
   }
 
   @Get("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Return Class based on id")
-  @Returns(200, Class)
-  async getClass(@PathParams("id") id: string): Promise<Class | null> {
+  @Summary("Return Grade based on id")
+  @Returns(200, Grade)
+  async getGrade(@PathParams("id") id: string): Promise<Grade | null> {
     return this.classesService.find(id);
   }
 
   @Post("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Create new Class")
-  @Returns(201, Class)
-  async createClass(
-    @Description("Class model")
+  @Summary("Create new Grade")
+  @Returns(201, Grade)
+  async createGrade(
+    @Description("Grade model")
     @BodyParams()
     @Required()
-    data: Class
-  ): Promise<Class> {
+    data: Grade
+  ): Promise<Grade> {
     return this.classesService.save(data);
   }
 
   @Put("/")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Update Class with id")
-  @Status(201, { description: "Updated Class", type: Class })
+  @Summary("Update Grade with id")
+  @Status(201, { description: "Updated Grade", type: Grade })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Class: Class
-  ): Promise<Class | null> {
-    return this.classesService.update(id, Class);
+    @BodyParams() @Required() Grade: Grade
+  ): Promise<Grade | null> {
+    return this.classesService.update(id, Grade);
   }
 
   @Delete("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Remove a Class")
+  @Summary("Remove a Grade")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {
     await this.classesService.remove(id);
