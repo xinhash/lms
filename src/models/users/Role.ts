@@ -19,6 +19,6 @@ export class Role {
   @Default("admin")
   name: string;
 
-  @Ref(User)
-  createdBy?: Ref<User>;
+  // @Ref(User)
+  // createdBy?: Ref<User>;
 }
