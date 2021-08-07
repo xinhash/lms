@@ -1,4 +1,4 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -38,7 +38,6 @@ export class Section {
   @Default("active")
   status: string;
 
-  @Property()
-  @Required()
-  createdBy: User;
+  @Ref(User)
+  createdBy?: Ref<User>;
 }

@@ -2,7 +2,9 @@ import {
   Indexed,
   Model,
   ObjectID,
+  PostHook,
   PreHook,
+  Ref,
   Trim,
   Unique,
 } from "@tsed/mongoose";
@@ -33,6 +35,9 @@ const getRandomBytes = util.promisify(crypto.randomBytes);
 @PreHook("save", async (user: User, next: any) => {
   const salt = await getRandomBytes(32);
   user.password = await argon2i.hash(user.password, salt);
+  if (user.role === "superadmin") {
+    user.adminId = user._id;
+  }
   next();
 })
 export class User {
@@ -64,11 +69,17 @@ export class User {
 
   @Optional()
   @Default(true)
-  isActive: boolean;
+  isActive?: boolean;
 
   @Optional()
   @Default(true)
-  isVerified: boolean;
+  isVerified?: boolean;
+
+  @Ref(() => User)
+  createdBy: Ref<User>;
+
+  @Ref(() => User)
+  adminId: Ref<User>;
 
   token: string;
 

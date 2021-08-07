@@ -1,4 +1,4 @@
-import { Indexed, Model, ObjectID, Trim, Unique } from "@tsed/mongoose";
+import { Indexed, Model, ObjectID, Ref, Trim, Unique } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -46,9 +46,8 @@ export class School {
   @Required()
   packagedId: Package;
 
-  @Property()
-  @Required()
-  createdBy: User;
+  @Ref(User)
+  createdBy?: Ref<User>;
 
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")

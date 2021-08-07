@@ -1,12 +1,10 @@
-import { accessibleRecordsPlugin } from "@casl/mongoose";
-import { Model, MongoosePlugin, ObjectID, Ref, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   CollectionOf,
   Default,
   Enum,
   Groups,
   MaxLength,
-  Minimum,
   MinLength,
   Property,
   Required,
@@ -16,7 +14,6 @@ import { Section } from "../sections/Section";
 import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
-@MongoosePlugin(accessibleRecordsPlugin)
 export class Grade {
   @Groups("!creation")
   @ObjectID("id")

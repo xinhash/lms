@@ -49,6 +49,5 @@ export class Package {
   status: string;
 
   @Ref(User)
-  @Required()
-  createdBy: Ref<User>;
+  createdBy?: Ref<User>;
 }
