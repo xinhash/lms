@@ -25,6 +25,13 @@ import { Role } from "./Role";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
+enum Roles {
+  SUPERADMIN = "superadmin",
+  ADMIN = "admin",
+  TEACHER = "teacher",
+  STUDENT = "student",
+}
+
 @Model({ schemaOptions: { timestamps: true } })
 @PreHook("save", async (user: User, next: any) => {
   const salt = await getRandomBytes(32);
@@ -57,9 +64,13 @@ export class User {
   @MaxLength(20)
   password: string;
 
-  @Ref(Role)
-  @Required()
-  role: Ref<Role>;
+  // @Ref(Role)
+  // @Required()
+  // role: Ref<Role>;
+
+  @Enum(Roles)
+  @Default("admin")
+  role: string;
 
   @Optional()
   @Default(true)
