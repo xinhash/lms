@@ -6,6 +6,21 @@ import { User } from "src/models/users/User";
 export class UsersService {
   @Inject(User) private user: MongooseModel<User>;
 
+  $onInit() {
+    this.seedUsers();
+  }
+
+  async seedUsers() {
+    const users = await this.user.find({});
+
+    if (users.length === 0) {
+      const promises = require("../../resources/user.json").map((user: User) =>
+        this.save(user)
+      );
+      await Promise.all(promises);
+    }
+  }
+
   async find(id: string): Promise<User | null> {
     const user = await this.user.findById(id).exec();
     $log.debug("Found user", user);

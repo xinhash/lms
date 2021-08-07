@@ -71,8 +71,5 @@
   "tsed": {
     "packageManager": "yarn",
     "convention": "default"
-  },
-  "_moduleAliases": {
-    "src": "dist/"
   }
 }

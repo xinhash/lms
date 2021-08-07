@@ -37,7 +37,7 @@ export class CastesController {
 
   @Post("/")
   @Authorize("jwt")
-  @AcceptRoles("superadmin", "admin")
+  @AcceptRoles("admin")
   @Summary("Create new Package")
   @Returns(201, Package)
   async createCaste(

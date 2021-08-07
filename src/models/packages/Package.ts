@@ -1,4 +1,4 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -48,7 +48,7 @@ export class Package {
   @Default("active")
   status: string;
 
-  @Property()
+  @Ref(User)
   @Required()
-  createdBy: User;
+  ref: Ref<User>;
 }
