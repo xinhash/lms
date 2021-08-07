@@ -1,5 +1,3 @@
-import 'module-alias/register';
-
 import { Configuration, Inject } from "@tsed/di";
 import { PlatformApplication } from "@tsed/common";
 import "@tsed/passport";

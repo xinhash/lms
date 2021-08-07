@@ -50,5 +50,5 @@ export class Package {
 
   @Ref(User)
   @Required()
-  ref: Ref<User>;
+  createdBy: Ref<User>;
 }

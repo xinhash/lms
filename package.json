@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "yarn run tsc",
-    "tsc": "tsc --project tsconfig.compile.json",
+    "tsc": "tsc --project tsconfig.compile.json && tscpaths -p tsconfig.compile.json -s ./src -o ./dist",
     "tsc:w": "tsc --project tsconfig.json -w",
     "start": "tsnd --inspect --ignore-watch node_modules --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
     "start:prod": "cross-env NODE_ENV=production node dist/index.js",
@@ -34,11 +34,11 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "method-override": "^3.0.0",
-    "module-alias": "^2.2.2",
     "mongoose": "^5.13.4",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "tscpaths": "^0.0.9"
   },
   "devDependencies": {
     "@tsed/cli-plugin-jest": "3.4.12",

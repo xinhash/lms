@@ -1,4 +1,5 @@
 import {
+  $log,
   BodyParams,
   Controller,
   Delete,
@@ -6,6 +7,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -40,7 +42,8 @@ export class CastesController {
   @AcceptRoles("admin")
   @Summary("Create new Package")
   @Returns(201, Package)
-  async createCaste(
+  async createPackage(
+    @Req() request: Req,
     @Description("Package model")
     @BodyParams()
     @Required()
