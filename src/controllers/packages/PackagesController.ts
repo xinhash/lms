@@ -49,6 +49,9 @@ export class CastesController {
     @Required()
     data: Package
   ): Promise<Package> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.packagesService.save(data);
   }
 

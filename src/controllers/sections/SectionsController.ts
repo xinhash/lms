@@ -6,6 +6,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -41,11 +42,15 @@ export class SectionsController {
   @Summary("Create new Section")
   @Returns(201, Section)
   async createSection(
+    @Req() request: Req,
     @Description("Section model")
     @BodyParams()
     @Required()
     data: Section
   ): Promise<Section> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.sectionsService.save(data);
   }
 

@@ -21,13 +21,7 @@ import {
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
-
-enum Roles {
-  SUPERADMIN = "superadmin",
-  ADMIN = "admin",
-  TEACHER = "teacher",
-  STUDENT = "student",
-}
+import { Role } from "./Role";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -63,9 +57,9 @@ export class User {
   @MaxLength(20)
   password: string;
 
-  @Enum(Roles)
-  @Default("admin")
-  role: Roles;
+  @Ref(Role)
+  @Required()
+  role: Ref<Role>;
 
   @Optional()
   @Default(true)

@@ -6,6 +6,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -41,11 +42,15 @@ export class MediumsController {
   @Summary("Create new Medium")
   @Returns(201, Medium)
   async createMedium(
+    @Req() request: Req,
     @Description("Medium model")
     @BodyParams()
     @Required()
     data: Medium
   ): Promise<Medium> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.mediumsService.save(data);
   }
 

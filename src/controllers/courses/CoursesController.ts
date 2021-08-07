@@ -6,6 +6,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -41,11 +42,15 @@ export class CoursesController {
   @Summary("Create new Course")
   @Returns(201, Course)
   async createCourse(
+    @Req() request: Req,
     @Description("Course model")
     @BodyParams()
     @Required()
     data: Course
   ): Promise<Course> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.coursesService.save(data);
   }
 

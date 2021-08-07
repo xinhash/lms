@@ -6,6 +6,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -41,11 +42,15 @@ export class GradesController {
   @Summary("Create new Grade")
   @Returns(201, Grade)
   async createGrade(
+    @Req() request: Req,
     @Description("Grade model")
     @BodyParams()
     @Required()
     data: Grade
   ): Promise<Grade> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.classesService.save(data);
   }
 

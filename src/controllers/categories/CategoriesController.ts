@@ -6,6 +6,7 @@ import {
   PathParams,
   Post,
   Put,
+  Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
 import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
@@ -41,11 +42,15 @@ export class CategoriesController {
   @Summary("Create new category")
   @Returns(201, Category)
   async createCategory(
+    @Req() request: Req,
     @Description("Category model")
     @BodyParams()
     @Required()
     data: Category
   ): Promise<Category> {
+    if (request.user) {
+      data = { ...data, createdBy: (request.user as any)._id };
+    }
     return this.categoriesService.save(data);
   }
 
