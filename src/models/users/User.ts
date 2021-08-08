@@ -2,7 +2,6 @@ import {
   Indexed,
   Model,
   ObjectID,
-  PostHook,
   PreHook,
   Ref,
   Trim,
@@ -21,7 +20,6 @@ import {
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
-import { Role } from "./Role";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -32,6 +30,14 @@ enum Roles {
   STUDENT = "student",
 }
 
+@Groups<User>({
+  // will generate UserCreate
+  create: ["username", "email", "password", "role", "isActive", "isVerified"],
+  // will generate UserUpdate
+  update: ["_id", "username", "email", "role", "isActive", "isVerified"],
+  // will generate UserChangePassword
+  changePassword: ["_id", "password"],
+})
 @Model({ schemaOptions: { timestamps: true } })
 @PreHook("save", async (user: User, next: any) => {
   const salt = await getRandomBytes(32);
@@ -42,7 +48,6 @@ enum Roles {
   next();
 })
 export class User {
-  @Groups("!creation")
   @ObjectID("id")
   _id: string;
 
@@ -58,7 +63,6 @@ export class User {
   @Trim()
   email: string;
 
-  @Groups("creation", "login")
   @Required()
   @MinLength(4)
   @MaxLength(20)
@@ -79,6 +83,11 @@ export class User {
   @Optional()
   @Default(true)
   isVerified?: boolean;
+
+  @Enum("male", "female")
+  @Optional()
+  @Default("male")
+  gender?: string;
 
   @Ref(() => User)
   createdBy: Ref<User>;

@@ -2,6 +2,7 @@ import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
+  Format,
   Groups,
   MaxLength,
   Minimum,
@@ -42,6 +43,14 @@ export class Package {
   @Minimum(0)
   @Default(0)
   amount: number = 0;
+
+  @Format("date")
+  @Required()
+  dueDate: Date;
+
+  @Format("date")
+  @Required()
+  billDate: Date;
 
   @Property()
   @Enum("active", "inactive")

@@ -1,16 +1,60 @@
-import { Indexed, Model, ObjectID, Ref, Trim, Unique } from "@tsed/mongoose";
 import {
+  Indexed,
+  Model,
+  ObjectID,
+  Ref,
+  Schema,
+  Trim,
+  Unique,
+} from "@tsed/mongoose";
+import {
+  CollectionOf,
   Default,
   Enum,
   Format,
   Groups,
   MaxLength,
   MinLength,
+  Optional,
+  Pattern,
   Property,
   Required,
 } from "@tsed/schema";
 import { Package } from "../packages/Package";
 import { User } from "../users/User";
+
+@Schema()
+class Address {
+  @Property()
+  @Trim()
+  name?: string;
+
+  @Required()
+  @MinLength(5)
+  @MaxLength(150)
+  @Trim()
+  addressLine1: string;
+
+  @Required()
+  @Trim()
+  addressLine2?: string;
+
+  @Required()
+  @Trim()
+  city: string;
+
+  @Required()
+  @Trim()
+  state: string;
+
+  @Required()
+  @Trim()
+  pincode: string;
+
+  @Optional()
+  @Trim()
+  landmark?: string;
+}
 
 @Model({ schemaOptions: { timestamps: true } })
 export class School {
@@ -32,7 +76,12 @@ export class School {
 
   @Property()
   @Required()
-  address: string; // use inline model
+  address: Address;
+
+  @Property()
+  @Required()
+  @Pattern(/^[6-9]\d{9}$/)
+  phoneNumber: number;
 
   @Enum("multi", "single")
   @Default("single")
@@ -42,7 +91,10 @@ export class School {
   @Default(false)
   isMainBranch: boolean;
 
-  @Property()
+  @CollectionOf(() => School)
+  branches: School[];
+
+  @Ref(Package)
   @Required()
   packagedId: Package;
 
