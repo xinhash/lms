@@ -43,6 +43,15 @@ export class SchoolsController {
     return this.schoolsService.find(id);
   }
 
+  @Get("/:id")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
+  @Summary("Return school branches based on school id")
+  @Returns(200, School)
+  async getSchoolBranches(@PathParams("id") id: string): Promise<School[]> {
+    return this.schoolsService.findBranches(id);
+  }
+
   @Post("/")
   @Authorize("jwt")
   @AcceptRoles("admin")

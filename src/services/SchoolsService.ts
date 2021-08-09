@@ -8,14 +8,20 @@ export class SchoolsService {
 
   async find(id: string): Promise<School | null> {
     const school = await this.school.findById(id).exec();
-    $log.debug("Found school", school);
     return school;
+  }
+
+  async findBranches(id: string): Promise<School[]> {
+    const school = await this.school.findById(id).exec();
+    const branches = school
+      ? await this.query({ mainBranchId: school.mainBranchId })
+      : [];
+    return branches;
   }
 
   async save(schoolObj: School): Promise<School> {
     const school = new this.school(schoolObj);
     await school.save();
-    $log.debug("Saved school", school);
     return school;
   }
 
@@ -31,7 +37,6 @@ export class SchoolsService {
       school.status = schoolObj.status;
 
       await school.save();
-      $log.debug("Updated school", school);
       return school;
     }
 
