@@ -8,7 +8,6 @@ import {
   Unique,
 } from "@tsed/mongoose";
 import {
-  CollectionOf,
   Default,
   Enum,
   Format,

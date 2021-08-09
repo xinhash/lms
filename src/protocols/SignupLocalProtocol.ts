@@ -5,6 +5,7 @@ import { Forbidden } from "@tsed/exceptions";
 import { UsersService } from "src/services/UsersService";
 import { User } from "src/models/users/User";
 import { Groups } from "@tsed/schema";
+import { RolesService } from "src/services/RolesService";
 
 @Protocol({
   name: "signup",
@@ -15,7 +16,10 @@ import { Groups } from "@tsed/schema";
   },
 })
 export class SignupLocalProtocol implements OnVerify, OnInstall {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private rolesService: RolesService
+  ) {}
 
   async $onVerify(
     @Req() request: Req,
@@ -28,7 +32,12 @@ export class SignupLocalProtocol implements OnVerify, OnInstall {
       throw new Forbidden("Email is already registered");
     }
     user.username = request.body.username;
-    console.log(user);
+    if (user.role) {
+      const role = await this.rolesService.findOne({ name: user.role });
+      if (role?._id) {
+        user.roleId = role?._id;
+      }
+    }
     return this.usersService.save(user);
   }
 

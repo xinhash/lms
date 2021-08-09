@@ -22,22 +22,22 @@ class PermissionRoles {
   roleName: string;
 
   @Property()
-  create: boolean = true;
+  readAttributes?: string[];
 
   @Property()
-  readAttributes: string[];
+  updateAttributes?: string[];
 
   @Property()
-  updateAttributes: string[];
+  create?: boolean = true;
 
   @Property()
-  read: boolean = true;
+  read?: boolean = true;
 
   @Property()
-  update: boolean = true;
+  update?: boolean = true;
 
   @Property()
-  delete: boolean = true;
+  delete?: boolean = true;
 }
 
 @Model({ schemaOptions: { timestamps: true } })
