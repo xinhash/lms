@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { House } from "src/models/houses/House";
 import { HousesService } from "src/services/HousesService";
@@ -45,7 +52,7 @@ export class HousesController {
     @Req() request: Req,
     @Description("House model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: House
   ): Promise<House> {
     if (request.user) {

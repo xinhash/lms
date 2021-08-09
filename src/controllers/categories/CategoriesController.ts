@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Category } from "src/models/categories/Category";
 import { CategoriesService } from "src/services/CategoriesService";
@@ -45,7 +52,7 @@ export class CategoriesController {
     @Req() request: Req,
     @Description("Category model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: Category
   ): Promise<Category> {
     if (request.user) {

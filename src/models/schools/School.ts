@@ -92,7 +92,7 @@ export class School {
   isMainBranch: boolean;
 
   @CollectionOf(() => School)
-  branches: School[];
+  mainBranchId: School;
 
   @Ref(Package)
   @Required()

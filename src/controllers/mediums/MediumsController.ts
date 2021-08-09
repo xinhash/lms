@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Medium } from "src/models/mediums/Medium";
 import { MediumsService } from "src/services/MediumsService";
@@ -45,7 +52,7 @@ export class MediumsController {
     @Req() request: Req,
     @Description("Medium model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: Medium
   ): Promise<Medium> {
     if (request.user) {

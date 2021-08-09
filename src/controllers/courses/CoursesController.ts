@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Course } from "src/models/courses/Course";
 import { CoursesService } from "src/services/CoursesService";
@@ -45,7 +52,7 @@ export class CoursesController {
     @Req() request: Req,
     @Description("Course model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: Course
   ): Promise<Course> {
     if (request.user) {

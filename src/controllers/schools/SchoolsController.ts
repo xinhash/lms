@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { School } from "src/models/schools/School";
 import { SchoolsService } from "src/services/SchoolsService";
@@ -43,7 +50,7 @@ export class SchoolsController {
   @Returns(201, School)
   async createSchool(
     @Req() request: Req,
-    @Description("School model") @BodyParams() @Required() data: School
+    @Description("School model") @BodyParams() @Groups("creation") data: School
   ): Promise<School> {
     if (request.user) {
       data = { ...data, createdBy: (request.user as any)._id };

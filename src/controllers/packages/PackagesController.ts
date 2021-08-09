@@ -10,7 +10,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Package } from "src/models/packages/Package";
 import { PackagesService } from "src/services/PackagesService";
@@ -46,7 +53,7 @@ export class CastesController {
     @Req() request: Req,
     @Description("Package model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: Package
   ): Promise<Package> {
     if (request.user) {

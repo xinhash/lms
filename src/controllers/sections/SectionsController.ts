@@ -9,7 +9,14 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Required, Returns, Status, Summary } from "@tsed/schema";
+import {
+  Description,
+  Groups,
+  Required,
+  Returns,
+  Status,
+  Summary,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Section } from "src/models/sections/Section";
 import { SectionsService } from "src/services/SectionsService";
@@ -45,7 +52,7 @@ export class SectionsController {
     @Req() request: Req,
     @Description("Section model")
     @BodyParams()
-    @Required()
+    @Groups("creation")
     data: Section
   ): Promise<Section> {
     if (request.user) {
