@@ -8,14 +8,14 @@ export class NationalitiesService {
 
   async find(id: string): Promise<Nationality | null> {
     const nationality = await this.nationality.findById(id).exec();
-    $log.debug("Found nationality", nationality);
+
     return nationality;
   }
 
   async save(nationalityObj: Nationality): Promise<Nationality> {
     const nationality = new this.nationality(nationalityObj);
     await nationality.save();
-    $log.debug("Saved nationality", nationality);
+
     return nationality;
   }
 
@@ -29,7 +29,7 @@ export class NationalitiesService {
       nationality.status = nationalityObj.status;
 
       await nationality.save();
-      $log.debug("Updated nationality", nationality);
+
       return nationality;
     }
 

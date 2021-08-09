@@ -8,14 +8,14 @@ export class GradesService {
 
   async find(id: string): Promise<Grade | null> {
     const Grade = await this.Grade.findById(id).exec();
-    $log.debug("Found Grade", Grade);
+
     return Grade;
   }
 
   async save(data: Grade): Promise<Grade> {
     const Grade = new this.Grade(data);
     await Grade.save();
-    $log.debug("Saved Grade", Grade);
+
     return Grade;
   }
 
@@ -27,7 +27,7 @@ export class GradesService {
       Grade.courseId = data.courseId;
       Grade.sectionIds = data.sectionIds;
       await Grade.save();
-      $log.debug("Updated Grade", Grade);
+
       return Grade;
     }
 

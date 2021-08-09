@@ -8,14 +8,14 @@ export class MediumsService {
 
   async find(id: string): Promise<Medium | null> {
     const Medium = await this.Medium.findById(id).exec();
-    $log.debug("Found Medium", Medium);
+
     return Medium;
   }
 
   async save(mediumObj: Medium): Promise<Medium> {
     const Medium = new this.Medium(mediumObj);
     await Medium.save();
-    $log.debug("Saved Medium", Medium);
+
     return Medium;
   }
 
@@ -26,7 +26,7 @@ export class MediumsService {
       Medium.status = mediumObj.status;
 
       await Medium.save();
-      $log.debug("Updated Medium", Medium);
+
       return Medium;
     }
 

@@ -23,20 +23,20 @@ export class UsersService {
 
   async find(id: string): Promise<User | null> {
     const user = await this.user.findById(id).exec();
-    $log.debug("Found user", user);
+
     return user;
   }
 
   async findOne(opts = {}): Promise<User | null> {
     const user = await this.user.findOne(opts).exec();
-    $log.debug("Found user", user);
+
     return user;
   }
 
   async save(userObj: User): Promise<User> {
     const user = new this.user(userObj);
     await user.save();
-    $log.debug("Saved user", user);
+
     return user;
   }
 

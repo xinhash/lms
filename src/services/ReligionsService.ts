@@ -8,14 +8,14 @@ export class ReligionsService {
 
   async find(id: string): Promise<Religion | null> {
     const religion = await this.religion.findById(id).exec();
-    $log.debug("Found religion", religion);
+
     return religion;
   }
 
   async save(religionObj: Religion): Promise<Religion> {
     const religion = new this.religion(religionObj);
     await religion.save();
-    $log.debug("Saved religion", religion);
+
     return religion;
   }
 
@@ -26,7 +26,7 @@ export class ReligionsService {
       religion.status = religionObj.status;
 
       await religion.save();
-      $log.debug("Updated religion", religion);
+
       return religion;
     }
 

@@ -8,14 +8,14 @@ export class SectionsService {
 
   async find(id: string): Promise<Section | null> {
     const Section = await this.Section.findById(id).exec();
-    $log.debug("Found Section", Section);
+
     return Section;
   }
 
   async save(sectionObj: Section): Promise<Section> {
     const Section = new this.Section(sectionObj);
     await Section.save();
-    $log.debug("Saved Section", Section);
+
     return Section;
   }
 
@@ -27,7 +27,7 @@ export class SectionsService {
       Section.mediumId = sectionObj.mediumId;
       Section.noOfStudents = sectionObj.noOfStudents;
       await Section.save();
-      $log.debug("Updated Section", Section);
+
       return Section;
     }
 

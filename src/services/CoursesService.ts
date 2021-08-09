@@ -8,14 +8,14 @@ export class CoursesService {
 
   async find(id: string): Promise<Course | null> {
     const Course = await this.Course.findById(id).exec();
-    $log.debug("Found Course", Course);
+
     return Course;
   }
 
   async save(courseObj: Course): Promise<Course> {
     const Course = new this.Course(courseObj);
     await Course.save();
-    $log.debug("Saved Course", Course);
+
     return Course;
   }
 
@@ -26,7 +26,7 @@ export class CoursesService {
       Course.status = courseObj.status;
 
       await Course.save();
-      $log.debug("Updated Course", Course);
+
       return Course;
     }
 

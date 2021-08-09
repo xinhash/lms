@@ -20,6 +20,7 @@ import {
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
+import { Role } from "./Role";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -68,13 +69,12 @@ export class User {
   @MaxLength(20)
   password: string;
 
-  // @Ref(Role)
-  // @Required()
-  // role: Ref<Role>;
-
   @Enum(Roles)
   @Default("admin")
   role: string;
+
+  @Ref(Role)
+  roleId: Ref<Role>;
 
   @Optional()
   @Default(true)

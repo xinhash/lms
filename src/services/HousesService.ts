@@ -8,14 +8,14 @@ export class HousesService {
 
   async find(id: string): Promise<House | null> {
     const House = await this.House.findById(id).exec();
-    $log.debug("Found House", House);
+
     return House;
   }
 
   async save(houseObj: House): Promise<House> {
     const House = new this.House(houseObj);
     await House.save();
-    $log.debug("Saved House", House);
+
     return House;
   }
 
@@ -27,7 +27,7 @@ export class HousesService {
       House.status = houseObj.status;
 
       await House.save();
-      $log.debug("Updated House", House);
+
       return House;
     }
 

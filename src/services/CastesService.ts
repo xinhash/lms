@@ -8,14 +8,14 @@ export class CastesService {
 
   async find(id: string): Promise<Caste | null> {
     const Caste = await this.Caste.findById(id).exec();
-    $log.debug("Found Caste", Caste);
+
     return Caste;
   }
 
   async save(casteObj: Caste): Promise<Caste> {
     const Caste = new this.Caste(casteObj);
     await Caste.save();
-    $log.debug("Saved Caste", Caste);
+
     return Caste;
   }
 
@@ -26,7 +26,7 @@ export class CastesService {
       Caste.status = casteObj.status;
 
       await Caste.save();
-      $log.debug("Updated Caste", Caste);
+
       return Caste;
     }
 

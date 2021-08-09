@@ -1,6 +1,5 @@
 import { Model, ObjectID, Ref } from "@tsed/mongoose";
 import { Default, Enum, Groups } from "@tsed/schema";
-import { User } from "../users/User";
 
 enum Roles {
   SUPERADMIN = "superadmin",
@@ -18,7 +17,4 @@ export class Role {
   @Enum(Roles)
   @Default("admin")
   name: string;
-
-  // @Ref(User)
-  // createdBy?: Ref<User>;
 }

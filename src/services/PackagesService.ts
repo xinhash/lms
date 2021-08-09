@@ -8,14 +8,14 @@ export class PackagesService {
 
   async find(id: string): Promise<Package | null> {
     const Package = await this.Package.findById(id).exec();
-    $log.debug("Found Package", Package);
+
     return Package;
   }
 
   async save(packageObj: Package): Promise<Package> {
     const Package = new this.Package(packageObj);
     await Package.save();
-    $log.debug("Saved Package", Package);
+
     return Package;
   }
 
@@ -30,7 +30,7 @@ export class PackagesService {
       Package.status = packageObj.status;
 
       await Package.save();
-      $log.debug("Updated Package", Package);
+
       return Package;
     }
 

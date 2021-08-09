@@ -8,14 +8,14 @@ export class CategoriesService {
 
   async find(id: string): Promise<Category | null> {
     const category = await this.category.findById(id).exec();
-    $log.debug("Found category", category);
+
     return category;
   }
 
   async save(categoryObj: Category): Promise<Category> {
     const category = new this.category(categoryObj);
     await category.save();
-    $log.debug("Saved category", category);
+
     return category;
   }
 
@@ -26,7 +26,7 @@ export class CategoriesService {
       category.status = categoryObj.status;
 
       await category.save();
-      $log.debug("Updated category", category);
+
       return category;
     }
 
