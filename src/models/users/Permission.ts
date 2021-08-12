@@ -1,5 +1,5 @@
-import { Model, ObjectID, Ref, Schema } from "@tsed/mongoose";
-import { Default, Enum, Groups, Property } from "@tsed/schema";
+import { Model, ObjectID, Ref } from "@tsed/mongoose";
+import { Default, Enum, Groups, Optional, Property } from "@tsed/schema";
 import { User } from "../users/User";
 
 enum Roles {
@@ -15,6 +15,9 @@ export class Permission {
   @ObjectID("id")
   _id: string;
 
+  @Ref(User)
+  userId?: Ref<User>;
+
   @Property()
   moduleName: string;
 
@@ -23,23 +26,33 @@ export class Permission {
   roleName: string;
 
   @Property()
-  readAttributes?: string[];
+  readIds: string[] = [];
 
   @Property()
-  updateAttributes?: string[];
+  updateIds: string[] = [];
 
   @Property()
-  create?: boolean = true;
+  deleteIds: string[] = [];
 
   @Property()
-  read?: boolean = true;
+  readAttributes?: string[] = [];
 
   @Property()
-  update?: boolean = true;
+  updateAttributes?: string[] = [];
 
-  @Property()
-  delete?: boolean = true;
+  @Optional()
+  @Default(false)
+  canCreate: boolean = false;
 
-  @Ref(User)
-  createdBy?: Ref<User>;
+  @Optional()
+  @Default(true)
+  canRead: boolean = true;
+
+  @Optional()
+  @Default(false)
+  canUpdate: boolean = false;
+
+  @Optional()
+  @Default(false)
+  canDelete: boolean = false;
 }

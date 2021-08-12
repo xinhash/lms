@@ -16,6 +16,7 @@ import {
   MinLength,
   Optional,
   Required,
+  RequiredGroups,
 } from "@tsed/schema";
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
@@ -31,14 +32,16 @@ enum Roles {
   STUDENT = "student",
 }
 
-@Groups<User>({
-  // will generate UserCreate
-  create: ["username", "email", "password", "role", "isActive", "isVerified"],
-  // will generate UserUpdate
-  update: ["_id", "username", "email", "role", "isActive", "isVerified"],
-  // will generate UserChangePassword
-  changePassword: ["_id", "password"],
-})
+// @Groups<User>({
+//   // will generate UserCreate
+//   create: ["username", "email", "password", "role", "isActive", "isVerified"],
+//   read: ["username", "email", "password", "role", "isActive", "isVerified"],
+//   // will generate UserUpdate
+//   update: ["_id", "username", "email", "role", "isActive", "isVerified"],
+//   // will generate UserChangePassword
+//   changePassword: ["_id", "password"],
+//   login: ["email", "password"],
+// })
 @Model({ schemaOptions: { timestamps: true } })
 @PreHook("save", async (user: User, next: any) => {
   const salt = await getRandomBytes(32);
@@ -49,6 +52,7 @@ enum Roles {
   next();
 })
 export class User {
+  @Groups("!creation")
   @ObjectID("id")
   _id: string;
 
@@ -74,7 +78,7 @@ export class User {
   role: string;
 
   @Ref(Role)
-  roleId: Ref<Role>;
+  roleId?: Ref<Role>;
 
   @Optional()
   @Default(true)

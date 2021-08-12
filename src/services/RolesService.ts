@@ -1,4 +1,4 @@
-import { Service, Inject, $log } from "@tsed/common";
+import { Service, Inject } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { Role } from "src/models/users/Role";
 
@@ -39,6 +39,17 @@ export class RolesService {
 
   async query(options = {}): Promise<Role[]> {
     return this.role.find(options).exec();
+  }
+
+  async update(id: string, data: Role): Promise<Role | null> {
+    const role = await this.role.findById(id).exec();
+    if (role) {
+      role.name = data.name;
+      await role.save();
+      return role;
+    }
+
+    return role;
   }
 
   async remove(id: string): Promise<Role> {

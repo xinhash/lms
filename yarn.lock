@@ -657,6 +657,13 @@
     globby "11.0.3"
     tslib "2.2.0"
 
+"@tsed/event-emitter@^6.62.2":
+  version "6.62.2"
+  resolved "https://registry.yarnpkg.com/@tsed/event-emitter/-/event-emitter-6.62.2.tgz#8f976a70172edfebbf86ad52af575f9ee77fd7b5"
+  integrity sha512-698tKM6f+zEl7+G3j/x42fyrurvCU9dCSkjBD01+n5Hit6tHc43KLYE8NdNWveV6LwiK+/rtJCEr5GNTDyNh3g==
+  dependencies:
+    tslib "2.2.0"
+
 "@tsed/exceptions@6.62.1", "@tsed/exceptions@^6.62.0":
   version "6.62.1"
   resolved "https://registry.yarnpkg.com/@tsed/exceptions/-/exceptions-6.62.1.tgz#4258ade6e3da00b38fd49d55bc456fad8560925e"
@@ -904,6 +911,11 @@
   integrity sha512-4L8msWK31oXwdtC81RmRBAULd0ShnAHjBuKT9MRQpjP0piNrZdXyTRcKY9/UIfhGeKIT4PvF5amOOUbbT/9Wpg==
   dependencies:
     "@types/node" "*"
+
+"@types/lodash@^4.14.172":
+  version "4.14.172"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.172.tgz#aad774c28e7bfd7a67de25408e03ee5a8c3d028a"
+  integrity sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==
 
 "@types/method-override@^0.0.32":
   version "0.0.32"
@@ -2193,6 +2205,11 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
+
+eventemitter2@^6.4.4:
+  version "6.4.4"
+  resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-6.4.4.tgz#aa96e8275c4dbeb017a5d0e03780c65612a1202b"
+  integrity sha512-HLU3NDY6wARrLCEwyGKRBvuWYyvW6mHYv72SJJAH3iJN3a6eVUvkjFkcxah1bcTgGVBBrFdIopBJPhCQFMLyXw==
 
 execa@^5.0.0:
   version "5.1.1"

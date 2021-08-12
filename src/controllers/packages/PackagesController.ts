@@ -23,7 +23,7 @@ import { Package } from "src/models/packages/Package";
 import { PackagesService } from "src/services/PackagesService";
 
 @Controller("/packages")
-export class CastesController {
+export class PackagesController {
   constructor(private packagesService: PackagesService) {}
 
   @Get("/")

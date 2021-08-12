@@ -30,6 +30,11 @@ export class JwtProtocol implements OnVerify {
     // console.log(result);
     user.password = "";
     req.user = user;
+    // req.permissions = {
+    //   readIds: [],
+    //   updateIds: [],
+    //   deleteIds: [],
+    // };
 
     return user;
   }

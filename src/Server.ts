@@ -10,6 +10,7 @@ import cors from "cors";
 import "@tsed/ajv";
 import "@tsed/swagger";
 import "@tsed/mongoose";
+import "@tsed/event-emitter"; // import event emitter ts.ed module
 import { config, rootDir } from "./config";
 import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
@@ -44,6 +45,11 @@ import { User } from "./models/users/User";
   exclude: ["**/*.spec.ts"],
   passport: {
     userInfoModel: User,
+  },
+  eventEmitter: {
+    enabled: true, // Enable events for this instance.
+    // pass any options that you would normally pass to new EventEmitter2(), e.g.
+    wildcard: true,
   },
 })
 export class Server {

@@ -1,10 +1,13 @@
 import { Service, Inject, $log } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { User } from "src/models/users/User";
+import { EventEmitterService } from "@tsed/event-emitter";
+import { pickBy } from "lodash";
 
 @Service()
 export class UsersService {
   @Inject(User) private user: MongooseModel<User>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   $onInit() {
     this.seedUsers();
@@ -36,11 +39,13 @@ export class UsersService {
   async save(userObj: User): Promise<User> {
     const user = new this.user(userObj);
     await user.save();
-
+    this.eventEmitter.emit("entity.created", { user, moduleName: "User" });
     return user;
   }
 
   async query(options = {}): Promise<User[]> {
+    options = pickBy(options, (v) => ![undefined, null].includes(v));
+
     return this.user.find(options).exec();
   }
 
