@@ -4,8 +4,14 @@ import { MongooseModel } from "@tsed/mongoose";
 import { uniq } from "lodash";
 import { Permission } from "src/models/users/Permission";
 import { User } from "src/models/users/User";
+
+export type EntityCreationUser = {
+  role: User["role"];
+  _id: User["_id"];
+  adminId: User["adminId"];
+};
 interface UserCreated {
-  user: User;
+  user: EntityCreationUser;
   moduleName: "User" | "School" | "Grade";
 }
 @Service()

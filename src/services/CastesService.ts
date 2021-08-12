@@ -1,10 +1,13 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Caste } from "src/models/castes/Caste";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class CastesService {
   @Inject(Caste) private Caste: MongooseModel<Caste>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Caste | null> {
     const Caste = await this.Caste.findById(id).exec();
@@ -12,10 +15,10 @@ export class CastesService {
     return Caste;
   }
 
-  async save(casteObj: Caste): Promise<Caste> {
+  async save(casteObj: Caste, user: EntityCreationUser): Promise<Caste> {
     const Caste = new this.Caste(casteObj);
     await Caste.save();
-
+    this.eventEmitter.emit("entity.created", { user, moduleName: "Caste" });
     return Caste;
   }
 
@@ -24,12 +27,8 @@ export class CastesService {
     if (Caste) {
       Caste.name = casteObj.name;
       Caste.status = casteObj.status;
-
       await Caste.save();
-
-      return Caste;
     }
-
     return Caste;
   }
 

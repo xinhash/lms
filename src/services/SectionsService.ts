@@ -1,10 +1,13 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Section } from "src/models/sections/Section";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class SectionsService {
   @Inject(Section) private Section: MongooseModel<Section>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Section | null> {
     const Section = await this.Section.findById(id).exec();
@@ -12,10 +15,13 @@ export class SectionsService {
     return Section;
   }
 
-  async save(sectionObj: Section): Promise<Section> {
+  async save(sectionObj: Section, user: EntityCreationUser): Promise<Section> {
     const Section = new this.Section(sectionObj);
     await Section.save();
-
+    this.eventEmitter.emit("entity.created", {
+      user,
+      moduleName: "School",
+    });
     return Section;
   }
 

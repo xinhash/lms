@@ -58,7 +58,11 @@ export class MediumsController {
     if (request.user) {
       data = { ...data, createdBy: (request.user as any)._id };
     }
-    return this.mediumsService.save(data);
+    return this.mediumsService.save(data, {
+      role: (request.user as any).role,
+      _id: (request.user as any)._id,
+      adminId: (request.user as any).adminId,
+    });
   }
 
   @Put("/")

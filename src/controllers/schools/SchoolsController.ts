@@ -64,7 +64,11 @@ export class SchoolsController {
     if (request.user) {
       data = { ...data, createdBy: (request.user as any)._id };
     }
-    return this.schoolsService.save(data);
+    return this.schoolsService.save(data, {
+      role: (request.user as any).role,
+      _id: (request.user as any)._id,
+      adminId: (request.user as any).adminId,
+    });
   }
 
   @Put("/")

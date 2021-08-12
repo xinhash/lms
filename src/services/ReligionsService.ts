@@ -1,10 +1,13 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Religion } from "src/models/religions/Religion";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class ReligionsService {
   @Inject(Religion) private religion: MongooseModel<Religion>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Religion | null> {
     const religion = await this.religion.findById(id).exec();
@@ -12,10 +15,16 @@ export class ReligionsService {
     return religion;
   }
 
-  async save(religionObj: Religion): Promise<Religion> {
+  async save(
+    religionObj: Religion,
+    user: EntityCreationUser
+  ): Promise<Religion> {
     const religion = new this.religion(religionObj);
     await religion.save();
-
+    this.eventEmitter.emit("entity.created", {
+      user,
+      moduleName: "Religion",
+    });
     return religion;
   }
 
