@@ -2,7 +2,14 @@ import { Service, Inject, $log } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { User } from "src/models/users/User";
 import { EventEmitterService } from "@tsed/event-emitter";
-import { pickBy } from "lodash";
+
+function objectDefined<T>(obj: T): T {
+  const acc: Partial<T> = {};
+  for (const key in obj) {
+    if (obj[key] !== undefined || obj[key] !== null) acc[key] = obj[key];
+  }
+  return acc as T;
+}
 
 @Service()
 export class UsersService {
@@ -44,7 +51,7 @@ export class UsersService {
   }
 
   async query(options = {}): Promise<User[]> {
-    options = pickBy(options, (v) => ![undefined, null].includes(v));
+    options = objectDefined(options);
 
     return this.user.find(options).exec();
   }
