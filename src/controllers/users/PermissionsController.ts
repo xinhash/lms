@@ -26,6 +26,8 @@ export class PermissionsController {
   constructor(private permissionsService: PermissionsService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("superadmin")
   @Summary("Return all permissions")
   @Returns(200, Permission)
   async getAllPermission(): Promise<Permission[]> {

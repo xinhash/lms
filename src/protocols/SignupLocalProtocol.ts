@@ -32,6 +32,21 @@ export class SignupLocalProtocol implements OnVerify, OnInstall {
       throw new Forbidden("Email is already registered");
     }
     user.username = request.body.username;
+    const requestUserRole = (request.user as any).role;
+    if (user.role === "superadmin") {
+      // @ToDo: Validation should be done at once.
+      throw new Error("Insufficient permission");
+    }
+    if (user.role === "admin" && requestUserRole === "admin") {
+      throw new Error("Only superadmin can create Admin");
+    }
+    if (
+      requestUserRole === "superadmin" &&
+      ["teacher", "student"].includes(user.role) &&
+      !user.adminId
+    ) {
+      throw new Error("Missing field : adminId");
+    }
     if (user.role) {
       const role = await this.rolesService.findOne({ name: user.role });
       if (role?._id) {

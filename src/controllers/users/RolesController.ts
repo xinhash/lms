@@ -26,6 +26,8 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @Get("/")
+  @Authorize("jwt")
+  @AcceptRoles("superadmin")
   @Summary("Return all roles")
   @Returns(200, Role)
   async getAllRole(): Promise<Role[]> {
