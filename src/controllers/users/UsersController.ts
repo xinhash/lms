@@ -28,8 +28,11 @@ export class UsersController {
   @Summary("Return all users")
   @Returns(200, User)
   async getAllUsers(@Req() request: Req): Promise<User[]> {
-    console.log(request.user);
-    return this.usersService.query({ _id: request.permissions.readIds });
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.usersService.query(query);
   }
 
   @Get("/:id")
@@ -41,10 +44,9 @@ export class UsersController {
     @PathParams("id") id: string,
     @HeaderParams("authorization") token: string
   ): Promise<User | null> {
-    console.log(request.permissions);
     if (
-      request.permissions.readIds &&
-      !request.permissions.readIds.includes(id)
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
     ) {
       throw new Error("You don't have sufficient permissions");
     }

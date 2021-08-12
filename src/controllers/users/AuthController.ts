@@ -9,8 +9,7 @@ import {
   Scope,
 } from "@tsed/common";
 import { Authenticate, Authorize } from "@tsed/passport";
-import { Groups, Returns } from "@tsed/schema";
-import { AcceptRoles } from "src/decorators/AcceptRoles";
+import { Returns } from "@tsed/schema";
 import { User } from "src/models/users/User";
 
 @Controller("/auth")
