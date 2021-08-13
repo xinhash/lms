@@ -43,7 +43,16 @@ export class SectionsController {
   @AcceptRoles("admin")
   @Summary("Return Section based on id")
   @Returns(200, Section)
-  async getSection(@PathParams("id") id: string): Promise<Section | null> {
+  async getSection(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Section | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.sectionsService.find(id);
   }
 

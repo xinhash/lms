@@ -41,18 +41,18 @@ export class SchoolsController {
   @Get("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Return school based on id")
-  @Returns(200, School)
-  async getSchool(@PathParams("id") id: string): Promise<School | null> {
-    return this.schoolsService.find(id);
-  }
-
-  @Get("/:id")
-  @Authorize("jwt")
-  @AcceptRoles("admin")
   @Summary("Return school branches based on school id")
   @Returns(200, School)
-  async getSchoolBranches(@PathParams("id") id: string): Promise<School[]> {
+  async getSchoolBranches(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<School[]> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.schoolsService.findBranches(id);
   }
 

@@ -44,7 +44,16 @@ export class PackagesController {
   @AcceptRoles("admin")
   @Summary("Return Package based on id")
   @Returns(200, Package)
-  async getCaste(@PathParams("id") id: string): Promise<Package | null> {
+  async getCaste(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Package | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.packagesService.find(id);
   }
 

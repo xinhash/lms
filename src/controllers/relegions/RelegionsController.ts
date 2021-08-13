@@ -43,7 +43,16 @@ export class ReligionsController {
   @AcceptRoles("admin")
   @Summary("Return religion based on id")
   @Returns(200, Religion)
-  async getReligion(@PathParams("id") id: string): Promise<Religion | null> {
+  async getReligion(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Religion | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.religionsService.find(id);
   }
 

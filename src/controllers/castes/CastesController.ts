@@ -43,7 +43,16 @@ export class CastesController {
   @AcceptRoles("admin")
   @Summary("Return Caste based on id")
   @Returns(200, Caste)
-  async getCaste(@PathParams("id") id: string): Promise<Caste | null> {
+  async getCaste(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Caste | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.castesService.find(id);
   }
 

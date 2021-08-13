@@ -43,7 +43,16 @@ export class HousesController {
   @AcceptRoles("admin")
   @Summary("Return House based on id")
   @Returns(200, House)
-  async getHouse(@PathParams("id") id: string): Promise<House | null> {
+  async getHouse(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<House | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.housesService.find(id);
   }
 

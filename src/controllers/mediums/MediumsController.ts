@@ -43,7 +43,16 @@ export class MediumsController {
   @AcceptRoles("admin")
   @Summary("Return Medium based on id")
   @Returns(200, Medium)
-  async getMedium(@PathParams("id") id: string): Promise<Medium | null> {
+  async getMedium(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Medium | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.mediumsService.find(id);
   }
 

@@ -44,8 +44,15 @@ export class NationalitiesController {
   @Summary("Return nationality based on id")
   @Returns(200, Nationality)
   async getNationality(
-    @PathParams("id") id: string
+    @PathParams("id") id: string,
+    @Req() request: Req
   ): Promise<Nationality | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.nationalitiesService.find(id);
   }
 

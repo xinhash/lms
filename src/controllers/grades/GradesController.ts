@@ -43,7 +43,16 @@ export class GradesController {
   @AcceptRoles("admin")
   @Summary("Return Grade based on id")
   @Returns(200, Grade)
-  async getGrade(@PathParams("id") id: string): Promise<Grade | null> {
+  async getGrade(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Grade | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.classesService.find(id);
   }
 

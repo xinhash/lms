@@ -43,7 +43,16 @@ export class CategoriesController {
   @AcceptRoles("admin")
   @Summary("Return category based on id")
   @Returns(200, Category)
-  async getCategory(@PathParams("id") id: string): Promise<Category | null> {
+  async getCategory(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Category | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.categoriesService.find(id);
   }
 

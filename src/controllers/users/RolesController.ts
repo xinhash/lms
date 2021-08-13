@@ -30,8 +30,12 @@ export class RolesController {
   @AcceptRoles("superadmin")
   @Summary("Return all roles")
   @Returns(200, Role)
-  async getAllRole(): Promise<Role[]> {
-    return this.rolesService.query();
+  async getAllRole(@Req() request: Req): Promise<Role[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.rolesService.query(query);
   }
 
   @Get("/:id")
@@ -39,7 +43,16 @@ export class RolesController {
   @AcceptRoles("superadmin")
   @Summary("Return role based on id")
   @Returns(200, Role)
-  async getRole(@PathParams("id") id: string): Promise<Role | null> {
+  async getRole(
+    @PathParams("id") id: string,
+    @Req() request: Req
+  ): Promise<Role | null> {
+    if (
+      (request.user as any).role !== "superadmin" &&
+      !request.permissions?.readIds?.includes(id)
+    ) {
+      throw new Error("You don't have sufficient permissions");
+    }
     return this.rolesService.find(id);
   }
 
