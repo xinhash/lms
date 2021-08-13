@@ -30,8 +30,12 @@ export class SectionsController {
   @AcceptRoles("admin")
   @Summary("Return all Sections")
   @Returns(200, Section)
-  async getAllSections(): Promise<Section[]> {
-    return this.sectionsService.query();
+  async getAllSections(@Req() request: Req): Promise<Section[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.sectionsService.query(query);
   }
 
   @Get("/:id")

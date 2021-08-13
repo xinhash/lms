@@ -30,8 +30,12 @@ export class NationalitiesController {
   @AcceptRoles("admin")
   @Summary("Return all nationalities")
   @Returns(200, Nationality)
-  async getAllNationalities(): Promise<Nationality[]> {
-    return this.nationalitiesService.query();
+  async getAllNationalities(@Req() request: Req): Promise<Nationality[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.nationalitiesService.query(query);
   }
 
   @Get("/:id")

@@ -30,8 +30,12 @@ export class MediumsController {
   @AcceptRoles("admin")
   @Summary("Return all Mediums")
   @Returns(200, Medium)
-  async getAllMediums(): Promise<Medium[]> {
-    return this.mediumsService.query();
+  async getAllMediums(@Req() request: Req): Promise<Medium[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.mediumsService.query(query);
   }
 
   @Get("/:id")

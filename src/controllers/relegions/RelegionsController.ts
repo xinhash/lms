@@ -30,8 +30,12 @@ export class ReligionsController {
   @AcceptRoles("admin")
   @Summary("Return all religions")
   @Returns(200, Religion)
-  async getAllReligion(): Promise<Religion[]> {
-    return this.religionsService.query();
+  async getAllReligion(@Req() request: Req): Promise<Religion[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.religionsService.query(query);
   }
 
   @Get("/:id")

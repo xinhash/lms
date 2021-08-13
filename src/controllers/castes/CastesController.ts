@@ -30,8 +30,12 @@ export class CastesController {
   @AcceptRoles("admin")
   @Summary("Return all Castes")
   @Returns(200, Caste)
-  async getAllCastes(): Promise<Caste[]> {
-    return this.castesService.query();
+  async getAllCastes(@Req() request: Req): Promise<Caste[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.castesService.query(query);
   }
 
   @Get("/:id")

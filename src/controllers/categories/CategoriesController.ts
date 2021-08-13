@@ -30,8 +30,12 @@ export class CategoriesController {
   @AcceptRoles("admin")
   @Summary("Return all categories")
   @Returns(200, Category)
-  async getAllCategories(): Promise<Category[]> {
-    return this.categoriesService.query();
+  async getAllCategories(@Req() request: Req): Promise<Category[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.categoriesService.query(query);
   }
 
   @Get("/:id")

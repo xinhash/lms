@@ -30,8 +30,12 @@ export class CoursesController {
   @AcceptRoles("admin")
   @Summary("Return all Courses")
   @Returns(200, Course)
-  async getAllCourses(): Promise<Course[]> {
-    return this.coursesService.query();
+  async getAllCourses(@Req() request: Req): Promise<Course[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.coursesService.query(query);
   }
 
   @Get("/:id")

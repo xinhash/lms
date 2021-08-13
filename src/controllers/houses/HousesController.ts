@@ -30,8 +30,12 @@ export class HousesController {
   @AcceptRoles("admin")
   @Summary("Return all Houses")
   @Returns(200, House)
-  async getAllHouses(): Promise<House[]> {
-    return this.housesService.query();
+  async getAllHouses(@Req() request: Req): Promise<House[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.housesService.query(query);
   }
 
   @Get("/:id")

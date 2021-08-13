@@ -30,8 +30,12 @@ export class GradesController {
   @AcceptRoles("admin")
   @Summary("Return all Grades")
   @Returns(200, Grade)
-  async getAllGrades(): Promise<Grade[]> {
-    return this.classesService.query();
+  async getAllGrades(@Req() request: Req): Promise<Grade[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.classesService.query(query);
   }
 
   @Get("/:id")

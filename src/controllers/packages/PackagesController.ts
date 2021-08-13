@@ -31,8 +31,12 @@ export class PackagesController {
   @AcceptRoles("admin")
   @Summary("Return all Packages")
   @Returns(200, Package)
-  async getAllCastes(): Promise<Package[]> {
-    return this.packagesService.query();
+  async getAllCastes(@Req() request: Req): Promise<Package[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.packagesService.query(query);
   }
 
   @Get("/:id")

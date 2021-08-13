@@ -3,6 +3,7 @@ import { MongooseModel } from "@tsed/mongoose";
 import { House } from "src/models/houses/House";
 import { EventEmitterService } from "@tsed/event-emitter";
 import { EntityCreationUser } from "./PermissionsService";
+import { objectDefined } from "src/utils";
 
 @Service()
 export class HousesService {
@@ -38,6 +39,7 @@ export class HousesService {
   }
 
   async query(options = {}): Promise<House[]> {
+    options = objectDefined(options);
     return this.House.find(options).exec();
   }
 

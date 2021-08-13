@@ -1,6 +1,7 @@
 import { Service, Inject } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { Role } from "src/models/users/Role";
+import { objectDefined } from "src/utils";
 
 @Service()
 export class RolesService {
@@ -38,6 +39,7 @@ export class RolesService {
   }
 
   async query(options = {}): Promise<Role[]> {
+    options = objectDefined(options);
     return this.role.find(options).exec();
   }
 

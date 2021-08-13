@@ -4,6 +4,7 @@ import { MongooseModel } from "@tsed/mongoose";
 import { uniq } from "lodash";
 import { Permission } from "src/models/users/Permission";
 import { User } from "src/models/users/User";
+import { objectDefined } from "src/utils";
 
 export type EntityCreationUser = {
   role: User["role"];
@@ -91,6 +92,7 @@ export class PermissionsService {
   }
 
   async query(options = {}): Promise<Permission[]> {
+    options = objectDefined(options);
     return this.permission.find(options).exec();
   }
 

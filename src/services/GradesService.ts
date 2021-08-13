@@ -2,6 +2,7 @@ import { Service, Inject, $log } from "@tsed/common";
 import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Grade } from "src/models/grades/Grades";
+import { objectDefined } from "src/utils";
 import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
@@ -38,6 +39,7 @@ export class GradesService {
   }
 
   async query(options = {}): Promise<Grade[]> {
+    options = objectDefined(options);
     return this.Grade.find(options).exec();
   }
 

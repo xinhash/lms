@@ -30,8 +30,12 @@ export class SchoolsController {
   @AcceptRoles("admin")
   @Summary("Return all schools")
   @Returns(200, School)
-  async getAllSchools(): Promise<School[]> {
-    return this.schoolsService.query();
+  async getAllSchools(@Req() request: Req): Promise<School[]> {
+    let query = {};
+    if ((request.user as any).role !== "superadmin") {
+      query = { _id: request.permissions?.readIds };
+    }
+    return this.schoolsService.query(query);
   }
 
   @Get("/:id")

@@ -2,14 +2,7 @@ import { Service, Inject, $log } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { User } from "src/models/users/User";
 import { EventEmitterService } from "@tsed/event-emitter";
-
-function objectDefined<T>(obj: T): T {
-  const acc: Partial<T> = {};
-  for (const key in obj) {
-    if (obj[key] !== undefined || obj[key] !== null) acc[key] = obj[key];
-  }
-  return acc as T;
-}
+import { objectDefined } from "src/utils";
 
 @Service()
 export class UsersService {
