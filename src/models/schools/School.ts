@@ -63,7 +63,7 @@ export class School {
 
   @Ref(Package)
   @Required()
-  packaged: Ref<Package>;
+  package: Ref<Package>;
 
   @Ref(User)
   createdBy?: Ref<User>;

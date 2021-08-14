@@ -18,7 +18,7 @@ export class SchoolsService {
   async findBranches(id: string): Promise<School[]> {
     const school = await this.school.findById(id).exec();
     const branches = school
-      ? await this.query({ mainBranchId: school.mainBranchId })
+      ? await this.query({ mainBranch: school.mainBranch })
       : [];
     return branches;
   }
@@ -41,7 +41,7 @@ export class SchoolsService {
       school.address = schoolObj.address;
       school.branch = schoolObj.branch;
       school.isMainBranch = schoolObj.isMainBranch;
-      school.packagedId = schoolObj.packagedId;
+      school.package = schoolObj.package;
       school.status = schoolObj.status;
 
       await school.save();
