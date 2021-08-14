@@ -20,40 +20,8 @@ import {
   Required,
 } from "@tsed/schema";
 import { Package } from "../packages/Package";
+import { Address } from "../users/Address";
 import { User } from "../users/User";
-
-@Schema()
-class Address {
-  @Property()
-  @Trim()
-  name?: string;
-
-  @Required()
-  @MinLength(5)
-  @MaxLength(150)
-  @Trim()
-  addressLine1: string;
-
-  @Required()
-  @Trim()
-  addressLine2?: string;
-
-  @Required()
-  @Trim()
-  city: string;
-
-  @Required()
-  @Trim()
-  state: string;
-
-  @Required()
-  @Trim()
-  pincode: string;
-
-  @Optional()
-  @Trim()
-  landmark?: string;
-}
 
 @Model({ schemaOptions: { timestamps: true } })
 export class School {
@@ -91,11 +59,11 @@ export class School {
   isMainBranch: boolean;
 
   @Ref(() => School)
-  mainBranchId: School;
+  mainBranch: Ref<School>;
 
   @Ref(Package)
   @Required()
-  packagedId: Package;
+  packaged: Ref<Package>;
 
   @Ref(User)
   createdBy?: Ref<User>;

@@ -3,10 +3,12 @@ import { MongooseModel } from "@tsed/mongoose";
 import { User } from "src/models/users/User";
 import { EventEmitterService } from "@tsed/event-emitter";
 import { objectDefined } from "src/utils";
+import { Student } from "src/models/users/Student";
 
 @Service()
 export class UsersService {
   @Inject(User) private user: MongooseModel<User>;
+  @Inject(Student) private student: MongooseModel<Student>;
   @Inject() private eventEmitter: EventEmitterService;
 
   $onInit() {
@@ -40,6 +42,12 @@ export class UsersService {
     const user = new this.user(userObj);
     await user.save();
     this.eventEmitter.emit("entity.created", { user, moduleName: "User" });
+    if (user.role === "student") {
+      const student = new this.student({
+        user: user._id,
+      });
+      await student.save();
+    }
     return user;
   }
 

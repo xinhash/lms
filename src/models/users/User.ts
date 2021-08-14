@@ -11,17 +11,20 @@ import {
   Default,
   Email,
   Enum,
+  Format,
   Groups,
   MaxLength,
   MinLength,
   Optional,
+  Pattern,
   Required,
-  RequiredGroups,
 } from "@tsed/schema";
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
 import util from "util";
+import { Address } from "./Address";
 import { Role } from "./Role";
+import { SocialMediaAccount } from "./SocialMediaAccount";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
@@ -68,6 +71,22 @@ export class User {
   @Trim()
   email: string;
 
+  @Optional()
+  @Required()
+  @Pattern(/^[6-9]\d{9}$/)
+  phoneNumber: number;
+
+  @Optional()
+  @Format("date")
+  @Required()
+  dateOfBirth: Date;
+
+  @Optional()
+  currentAddress: Address;
+
+  @Optional()
+  permanentAddress: Address;
+
   @Required()
   @MinLength(4)
   @MaxLength(20)
@@ -77,8 +96,9 @@ export class User {
   @Default("admin")
   role: string;
 
+  @Optional()
   @Ref(Role)
-  roleId?: Ref<Role>;
+  roleId: Ref<Role>;
 
   @Optional()
   @Default(true)
@@ -86,12 +106,24 @@ export class User {
 
   @Optional()
   @Default(true)
-  isVerified?: boolean;
+  isVerified: boolean;
+
+  @Optional()
+  fatherName: string;
+
+  @Optional()
+  motherName: string;
+
+  @Optional()
+  socialMediaAccount: SocialMediaAccount;
+
+  @Optional()
+  photo: string;
 
   @Enum("male", "female")
   @Optional()
   @Default("male")
-  gender?: string;
+  gender: string;
 
   @Ref(() => User)
   createdBy: Ref<User>;
