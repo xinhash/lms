@@ -40,12 +40,7 @@ export class LocalProtocol implements OnVerify {
     const token = this.createJwt(user);
 
     this.usersService.attachToken(user, token);
-    const userData: any = Object.assign({}, user);
-    delete userData["password"];
-    delete userData["adminId"];
-    delete userData["createdBy"];
-
-    return { token: user.token, user: userData };
+    return { token: user.token, user };
   }
 
   createJwt(user: User) {
