@@ -68,6 +68,8 @@ export class School {
   @Ref(User)
   createdBy?: Ref<User>;
 
+  adminId?: string
+
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")
   status: string;

@@ -65,8 +65,11 @@ export class SchoolsController {
     @Req() request: Req,
     @Description("School model") @BodyParams() @Groups("creation") data: School
   ): Promise<School> {
+    // if superadmin there should be userObj for Admin
+    // create admin first
+    // user that for creating school
     if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+      data = { ...data, createdBy: data.adminId || (request.user as any)._id };
     }
     return this.schoolsService.save(data, {
       role: (request.user as any).role,
