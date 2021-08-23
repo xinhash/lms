@@ -78,7 +78,7 @@ export class CastesController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Caste with id")

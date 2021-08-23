@@ -78,7 +78,7 @@ export class CategoriesController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update category with id")

@@ -78,7 +78,7 @@ export class MediumsController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Medium with id")

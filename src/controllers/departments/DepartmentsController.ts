@@ -78,7 +78,7 @@ export class DepartmentsController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Department with id")

@@ -78,7 +78,7 @@ export class NationalitiesController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update nationality with id")

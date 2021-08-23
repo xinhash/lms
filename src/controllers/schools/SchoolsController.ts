@@ -78,7 +78,7 @@ export class SchoolsController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update school with id")

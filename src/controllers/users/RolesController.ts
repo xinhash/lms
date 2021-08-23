@@ -74,7 +74,7 @@ export class RolesController {
     return this.rolesService.save(data);
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Update role with id")

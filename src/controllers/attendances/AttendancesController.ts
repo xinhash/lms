@@ -78,7 +78,7 @@ export class AttendancesController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Attendance with id")

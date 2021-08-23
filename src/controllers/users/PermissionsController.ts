@@ -74,7 +74,7 @@ export class PermissionsController {
     return this.permissionsService.save(data);
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Update permission with id")

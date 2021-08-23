@@ -78,7 +78,7 @@ export class GradesController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Grade with id")

@@ -75,7 +75,7 @@ export class StaffsController {
     });
   }
 
-  @Put("/")
+  @Put("/:id")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Staff with id")
