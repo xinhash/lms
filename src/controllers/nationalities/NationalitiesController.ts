@@ -85,7 +85,7 @@ export class NationalitiesController {
   @Status(201, { description: "Updated nationality", type: Nationality })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() nationality: Nationality
+    @BodyParams() @Required() @Groups('updation') nationality: Nationality
   ): Promise<Nationality | null> {
     return this.nationalitiesService.update(id, nationality);
   }

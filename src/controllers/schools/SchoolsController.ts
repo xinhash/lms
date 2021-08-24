@@ -85,7 +85,7 @@ export class SchoolsController {
   @Status(201, { description: "Updated school", type: School })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() school: School
+    @BodyParams() @Required() @Groups('updation') school: School
   ): Promise<School | null> {
     return this.schoolsService.update(id, school);
   }

@@ -22,13 +22,18 @@ export class LocalProtocol implements OnVerify {
   @Constant("passport.protocols.jwt.settings")
   jwtSettings: any;
 
+  async getUser({email}: {email: User['email']}) {
+    const user = await this.usersService.findOne({ email });
+    return user
+  }
+
   async $onVerify(
     @Req() request: Req,
-    @BodyParams() @Groups("login") credentials: User
+    @BodyParams() @Groups("creation") credentials: User
   ) {
     const { email, password } = credentials;
-
-    const user = await this.usersService.findOne({ email });
+    const user = await this.getUser({ email });
+    
     if (!user) {
       throw new Unauthorized("Wrong credentials");
     }

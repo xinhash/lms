@@ -85,7 +85,7 @@ export class MediumsController {
   @Status(201, { description: "Updated Medium", type: Medium })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Medium: Medium
+    @BodyParams() @Required() @Groups('updation') Medium: Medium
   ): Promise<Medium | null> {
     return this.mediumsService.update(id, Medium);
   }

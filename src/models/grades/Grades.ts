@@ -15,7 +15,7 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Grade {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -26,12 +26,13 @@ export class Grade {
   @Trim()
   name: string;
 
-  @Property(() => Course)
+  @Ref(Course)
   @Required()
-  courseId: string;
+  courseId: Ref<Course>;
 
-  @CollectionOf(Section)
-  sectionIds: Section[];
+  @Ref(() => Section)
+  @CollectionOf(() => Section)
+  sectionIds: Ref<Section>[];
 
   @Property()
   @Enum("active", "inactive")

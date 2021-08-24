@@ -25,7 +25,7 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class School {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -66,6 +66,7 @@ export class School {
   package: Ref<Package>;
 
   @Ref(User)
+  @Groups("!creation", "!updation")
   createdBy?: Ref<User>;
 
   adminId?: string

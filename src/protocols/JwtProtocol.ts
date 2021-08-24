@@ -28,7 +28,6 @@ export class JwtProtocol implements OnVerify {
     }
     // const result = deserialize({ ...user }, { type: User, groups: ["update"] });
     // console.log(result);
-    user.password = "";
     req.user = user;
     // req.permissions = {
     //   readIds: [],

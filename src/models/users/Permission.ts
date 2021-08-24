@@ -11,7 +11,7 @@ enum Roles {
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Permission {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 

@@ -85,7 +85,7 @@ export class AttendancesController {
   @Status(201, { description: "Updated Attendance", type: Attendance })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Attendance: Attendance
+    @BodyParams() @Required() @Groups('updation') Attendance: Attendance
   ): Promise<Attendance | null> {
     return this.attendancesService.update(id, Attendance);
   }

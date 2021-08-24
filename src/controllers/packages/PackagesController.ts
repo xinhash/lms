@@ -86,7 +86,7 @@ export class PackagesController {
   @Status(201, { description: "Updated Package", type: Package })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Package: Package
+    @BodyParams() @Required() @Groups('updation') Package: Package
   ): Promise<Package | null> {
     return this.packagesService.update(id, Package);
   }

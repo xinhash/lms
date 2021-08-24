@@ -85,7 +85,7 @@ export class HousesController {
   @Status(201, { description: "Updated House", type: House })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() House: House
+    @BodyParams() @Required() @Groups('updation') House: House
   ): Promise<House | null> {
     return this.housesService.update(id, House);
   }

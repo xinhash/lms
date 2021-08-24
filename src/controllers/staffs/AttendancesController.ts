@@ -82,7 +82,7 @@ export class StaffsController {
   @Status(201, { description: "Updated Staff", type: Staff })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Staff: Staff
+    @BodyParams() @Required() @Groups('updation') Staff: Staff
   ): Promise<Staff | null> {
     return this.staffsService.update(id, Staff);
   }

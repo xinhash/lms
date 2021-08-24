@@ -85,7 +85,7 @@ export class DepartmentsController {
   @Status(201, { description: "Updated Department", type: Department })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Department: Department
+    @BodyParams() @Required() @Groups('updation') Department: Department
   ): Promise<Department | null> {
     return this.departmentsService.update(id, Department);
   }

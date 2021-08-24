@@ -85,7 +85,7 @@ export class ReligionsController {
   @Status(201, { description: "Updated religion", type: Religion })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() religion: Religion
+    @BodyParams() @Required() @Groups('updation') religion: Religion
   ): Promise<Religion | null> {
     return this.religionsService.update(id, religion);
   }

@@ -12,7 +12,7 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class House {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -35,5 +35,6 @@ export class House {
   status: string;
 
   @Ref(User)
+  @Groups("!creation", "!updation")
   createdBy?: Ref<User>;
 }

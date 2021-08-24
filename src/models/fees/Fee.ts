@@ -19,7 +19,7 @@ class FeeData {
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Fee {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -45,5 +45,6 @@ export class Fee {
   status: string;
 
   @Ref(User)
+  @Groups("!creation", "!updation")
   createdBy?: Ref<User>;
 }

@@ -85,7 +85,7 @@ export class FeesController {
   @Status(201, { description: "Updated Fee", type: Fee })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Fee: Fee
+    @BodyParams() @Required() @Groups('updation') Fee: Fee
   ): Promise<Fee | null> {
     return this.feesService.update(id, Fee);
   }

@@ -55,7 +55,7 @@ enum Roles {
   next();
 })
 export class User {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -90,6 +90,7 @@ export class User {
   @Required()
   @MinLength(4)
   @MaxLength(20)
+  @Groups("creation")
   password: string;
 
   @Enum(Roles)
@@ -126,14 +127,17 @@ export class User {
   gender: string;
 
   @Ref(() => User)
+  @Groups("!creation", "!updation")
   createdBy: Ref<User>;
 
   @Ref(() => User)
+  @Groups("!updation")
   adminId: Ref<User>;
 
   token: string;
 
   public async verifyPassword(pwd: string): Promise<boolean> {
+    console.log(pwd, this.password)
     const password = Buffer.from(pwd);
     const isCorrect = await argon2i.verify(this.password, password);
     return isCorrect;
