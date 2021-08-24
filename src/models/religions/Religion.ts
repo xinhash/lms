@@ -1,4 +1,4 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -8,10 +8,11 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Religion {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -26,4 +27,8 @@ export class Religion {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Ref(User)
+  @Groups("!creation", "!updation")
+  createdBy?: Ref<User>;
 }

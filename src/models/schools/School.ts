@@ -1,4 +1,12 @@
-import { Indexed, Model, ObjectID, Trim, Unique } from "@tsed/mongoose";
+import {
+  Indexed,
+  Model,
+  ObjectID,
+  Ref,
+  Schema,
+  Trim,
+  Unique,
+} from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -6,14 +14,18 @@ import {
   Groups,
   MaxLength,
   MinLength,
+  Optional,
+  Pattern,
   Property,
   Required,
 } from "@tsed/schema";
 import { Package } from "../packages/Package";
+import { Address } from "../users/Address";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class School {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -31,7 +43,12 @@ export class School {
 
   @Property()
   @Required()
-  address: string; // use inline model
+  address: Address;
+
+  @Property()
+  @Required()
+  @Pattern(/^[6-9]\d{9}$/)
+  phoneNumber: number;
 
   @Enum("multi", "single")
   @Default("single")
@@ -41,8 +58,18 @@ export class School {
   @Default(false)
   isMainBranch: boolean;
 
-  @Property(() => Package)
-  packagedId: Package;
+  @Ref(() => School)
+  mainBranch: Ref<School>;
+
+  @Ref(Package)
+  @Required()
+  package: Ref<Package>;
+
+  @Ref(User)
+  @Groups("!creation", "!updation")
+  createdBy?: Ref<User>;
+
+  adminId?: string
 
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")

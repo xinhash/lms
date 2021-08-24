@@ -1,4 +1,4 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -9,11 +9,13 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { Grade } from "../grades/Grades";
 import { Medium } from "../mediums/Medium";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Section {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -24,9 +26,9 @@ export class Section {
   @Trim()
   name: string;
 
-  @Property(() => Medium)
+  @Property(Medium)
   @Required()
-  mediumId: string;
+  mediumId: Ref<Medium>;
 
   @Minimum(0)
   @Default(0)
@@ -36,4 +38,12 @@ export class Section {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Ref(() => Grade)
+  @Required()
+  gradeId: Ref<Grade>;
+
+  @Ref(User)
+  @Groups("!creation", "!updation")
+  createdBy?: Ref<User>;
 }

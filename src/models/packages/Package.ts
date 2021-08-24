@@ -1,7 +1,8 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
   Default,
   Enum,
+  Format,
   Groups,
   MaxLength,
   Minimum,
@@ -9,10 +10,11 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Package {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -42,8 +44,20 @@ export class Package {
   @Default(0)
   amount: number = 0;
 
+  @Format("date")
+  @Required()
+  dueDate: Date;
+
+  @Format("date")
+  @Required()
+  billDate: Date;
+
   @Property()
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Ref(User)
+  @Groups("!creation", "!updation")
+  createdBy?: Ref<User>;
 }

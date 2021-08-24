@@ -1,21 +1,28 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Section } from "src/models/sections/Section";
+import { objectDefined } from "src/utils";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class SectionsService {
   @Inject(Section) private Section: MongooseModel<Section>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Section | null> {
     const Section = await this.Section.findById(id).exec();
-    $log.debug("Found Section", Section);
+
     return Section;
   }
 
-  async save(sectionObj: Section): Promise<Section> {
+  async save(sectionObj: Section, user: EntityCreationUser): Promise<Section> {
     const Section = new this.Section(sectionObj);
     await Section.save();
-    $log.debug("Saved Section", Section);
+    this.eventEmitter.emit("entity.created", {
+      user,
+      moduleName: "School",
+    });
     return Section;
   }
 
@@ -27,7 +34,7 @@ export class SectionsService {
       Section.mediumId = sectionObj.mediumId;
       Section.noOfStudents = sectionObj.noOfStudents;
       await Section.save();
-      $log.debug("Updated Section", Section);
+
       return Section;
     }
 
@@ -35,6 +42,7 @@ export class SectionsService {
   }
 
   async query(options = {}): Promise<Section[]> {
+    options = objectDefined(options);
     return this.Section.find(options).exec();
   }
 

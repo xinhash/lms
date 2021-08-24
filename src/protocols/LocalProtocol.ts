@@ -1,6 +1,7 @@
 import { BodyParams, Constant, Inject, Req } from "@tsed/common";
 import { Unauthorized } from "@tsed/exceptions";
 import { OnVerify, Protocol } from "@tsed/passport";
+import { Groups } from "@tsed/schema";
 import * as jwt from "jsonwebtoken";
 import { IStrategyOptions, Strategy } from "passport-local";
 import { User } from "src/models/users/User";
@@ -21,27 +22,30 @@ export class LocalProtocol implements OnVerify {
   @Constant("passport.protocols.jwt.settings")
   jwtSettings: any;
 
-  async $onVerify(@Req() request: Req, @BodyParams() credentials: User) {
-    const { email, password } = credentials;
-
+  async getUser({email}: {email: User['email']}) {
     const user = await this.usersService.findOne({ email });
+    return user
+  }
 
+  async $onVerify(
+    @Req() request: Req,
+    @BodyParams() @Groups("creation") credentials: User
+  ) {
+    const { email, password } = credentials;
+    const user = await this.getUser({ email });
+    
     if (!user) {
       throw new Unauthorized("Wrong credentials");
     }
-
-    if (!user.verifyPassword(password)) {
+    const passwordMatched = await user.verifyPassword(password);
+    if (!passwordMatched) {
       throw new Unauthorized("Wrong credentials");
     }
 
     const token = this.createJwt(user);
 
     this.usersService.attachToken(user, token);
-    //     const response = {
-    //       token,
-    //     };
-    //     console.log(response);
-    return { token: user.token };
+    return { token: user.token, user };
   }
 
   createJwt(user: User) {

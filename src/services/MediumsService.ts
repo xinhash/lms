@@ -1,21 +1,25 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Medium } from "src/models/mediums/Medium";
+import { objectDefined } from "src/utils";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class MediumsService {
   @Inject(Medium) private Medium: MongooseModel<Medium>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Medium | null> {
     const Medium = await this.Medium.findById(id).exec();
-    $log.debug("Found Medium", Medium);
+
     return Medium;
   }
 
-  async save(mediumObj: Medium): Promise<Medium> {
+  async save(mediumObj: Medium, user: EntityCreationUser): Promise<Medium> {
     const Medium = new this.Medium(mediumObj);
     await Medium.save();
-    $log.debug("Saved Medium", Medium);
+    this.eventEmitter.emit("entity.created", { user, moduleName: "Medium" });
     return Medium;
   }
 
@@ -26,7 +30,7 @@ export class MediumsService {
       Medium.status = mediumObj.status;
 
       await Medium.save();
-      $log.debug("Updated Medium", Medium);
+
       return Medium;
     }
 
@@ -34,6 +38,7 @@ export class MediumsService {
   }
 
   async query(options = {}): Promise<Medium[]> {
+    options = objectDefined(options);
     return this.Medium.find(options).exec();
   }
 

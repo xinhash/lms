@@ -1,21 +1,31 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Nationality } from "src/models/nationalities/Nationality";
+import { objectDefined } from "src/utils";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class NationalitiesService {
   @Inject(Nationality) private nationality: MongooseModel<Nationality>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Nationality | null> {
     const nationality = await this.nationality.findById(id).exec();
-    $log.debug("Found nationality", nationality);
+
     return nationality;
   }
 
-  async save(nationalityObj: Nationality): Promise<Nationality> {
+  async save(
+    nationalityObj: Nationality,
+    user: EntityCreationUser
+  ): Promise<Nationality> {
     const nationality = new this.nationality(nationalityObj);
     await nationality.save();
-    $log.debug("Saved nationality", nationality);
+    this.eventEmitter.emit("entity.created", {
+      user,
+      moduleName: "Nationality",
+    });
     return nationality;
   }
 
@@ -29,7 +39,7 @@ export class NationalitiesService {
       nationality.status = nationalityObj.status;
 
       await nationality.save();
-      $log.debug("Updated nationality", nationality);
+
       return nationality;
     }
 
@@ -37,6 +47,7 @@ export class NationalitiesService {
   }
 
   async query(options = {}): Promise<Nationality[]> {
+    options = objectDefined(options);
     return this.nationality.find(options).exec();
   }
 

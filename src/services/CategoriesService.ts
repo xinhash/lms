@@ -1,21 +1,27 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Category } from "src/models/categories/Category";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class CategoriesService {
   @Inject(Category) private category: MongooseModel<Category>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Category | null> {
     const category = await this.category.findById(id).exec();
-    $log.debug("Found category", category);
+
     return category;
   }
 
-  async save(categoryObj: Category): Promise<Category> {
+  async save(
+    categoryObj: Category,
+    user: EntityCreationUser
+  ): Promise<Category> {
     const category = new this.category(categoryObj);
     await category.save();
-    $log.debug("Saved category", category);
+    this.eventEmitter.emit("entity.created", { user, moduleName: "Category" });
     return category;
   }
 
@@ -26,7 +32,7 @@ export class CategoriesService {
       category.status = categoryObj.status;
 
       await category.save();
-      $log.debug("Updated category", category);
+
       return category;
     }
 

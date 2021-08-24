@@ -1,21 +1,25 @@
 import { Service, Inject, $log } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { House } from "src/models/houses/House";
+import { EventEmitterService } from "@tsed/event-emitter";
+import { EntityCreationUser } from "./PermissionsService";
+import { objectDefined } from "src/utils";
 
 @Service()
 export class HousesService {
   @Inject(House) private House: MongooseModel<House>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<House | null> {
     const House = await this.House.findById(id).exec();
-    $log.debug("Found House", House);
+
     return House;
   }
 
-  async save(houseObj: House): Promise<House> {
+  async save(houseObj: House, user: EntityCreationUser): Promise<House> {
     const House = new this.House(houseObj);
     await House.save();
-    $log.debug("Saved House", House);
+    this.eventEmitter.emit("entity.created", { user, moduleName: "House" });
     return House;
   }
 
@@ -27,7 +31,7 @@ export class HousesService {
       House.status = houseObj.status;
 
       await House.save();
-      $log.debug("Updated House", House);
+
       return House;
     }
 
@@ -35,6 +39,7 @@ export class HousesService {
   }
 
   async query(options = {}): Promise<House[]> {
+    options = objectDefined(options);
     return this.House.find(options).exec();
   }
 

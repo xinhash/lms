@@ -3,6 +3,8 @@ import { Unauthorized } from "@tsed/exceptions";
 import { Arg, OnVerify, Protocol } from "@tsed/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { UsersService } from "../services/UsersService";
+// import { deserialize } from "json-schema";
+// import { User } from "src/models/users/User";
 
 @Protocol({
   name: "jwt",
@@ -24,8 +26,14 @@ export class JwtProtocol implements OnVerify {
     if (!user) {
       throw new Unauthorized("Wrong token");
     }
-
+    // const result = deserialize({ ...user }, { type: User, groups: ["update"] });
+    // console.log(result);
     req.user = user;
+    // req.permissions = {
+    //   readIds: [],
+    //   updateIds: [],
+    //   deleteIds: [],
+    // };
 
     return user;
   }

@@ -10,7 +10,6 @@ import {
 } from "@tsed/common";
 import { Authenticate, Authorize } from "@tsed/passport";
 import { Returns } from "@tsed/schema";
-import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { User } from "src/models/users/User";
 
 @Controller("/auth")
@@ -28,7 +27,7 @@ export class AuthController {
 
   @Get("/info")
   @Authorize("jwt")
-  @Returns(200, User)
+  @Returns(200, User).Groups("group.*")
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getUserInfo(@Req() req: Req, @HeaderParams("authorization") token: string) {
     return req.user;

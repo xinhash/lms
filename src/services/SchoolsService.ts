@@ -1,21 +1,35 @@
 import { Service, Inject, $log } from "@tsed/common";
+import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { School } from "src/models/schools/School";
+import { objectDefined } from "src/utils";
+import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class SchoolsService {
   @Inject(School) private school: MongooseModel<School>;
+  @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<School | null> {
     const school = await this.school.findById(id).exec();
-    $log.debug("Found school", school);
     return school;
   }
 
-  async save(schoolObj: School): Promise<School> {
+  async findBranches(id: string): Promise<School[]> {
+    const school = await this.school.findById(id).exec();
+    const branches = school
+      ? await this.query({ mainBranch: school.mainBranch })
+      : [];
+    return branches;
+  }
+
+  async save(schoolObj: School, user: EntityCreationUser): Promise<School> {
     const school = new this.school(schoolObj);
     await school.save();
-    $log.debug("Saved school", school);
+    this.eventEmitter.emit("entity.created", {
+      user,
+      moduleName: "School",
+    });
     return school;
   }
 
@@ -27,11 +41,10 @@ export class SchoolsService {
       school.address = schoolObj.address;
       school.branch = schoolObj.branch;
       school.isMainBranch = schoolObj.isMainBranch;
-      school.packagedId = schoolObj.packagedId;
+      school.package = schoolObj.package;
       school.status = schoolObj.status;
 
       await school.save();
-      $log.debug("Updated school", school);
       return school;
     }
 
@@ -39,6 +52,7 @@ export class SchoolsService {
   }
 
   async query(options = {}): Promise<School[]> {
+    options = objectDefined(options);
     return this.school.find(options).exec();
   }
 

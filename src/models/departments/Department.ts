@@ -1,21 +1,18 @@
-import { Model, ObjectID, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
 import {
-  CollectionOf,
   Default,
   Enum,
   Groups,
   MaxLength,
-  Minimum,
   MinLength,
   Property,
   Required,
 } from "@tsed/schema";
-import { Course } from "../courses/Course";
-import { Section } from "../sections/Section";
+import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
-export class Class {
-  @Groups("!creation")
+export class Department {
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -26,15 +23,12 @@ export class Class {
   @Trim()
   name: string;
 
-  @Property(() => Course)
-  @Required()
-  courseId: string;
-
-  @CollectionOf(Section)
-  sectionIds: Section[];
-
   @Property()
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Ref(User)
+  @Groups("!creation", "!updation")
+  createdBy?: Ref<User>;
 }
