@@ -82,7 +82,7 @@ export class School {
   @Default("active")
   status: string;
 
-  @Optional()
+  @Required()
   @Format("date")
   startedAt: Date;
 }

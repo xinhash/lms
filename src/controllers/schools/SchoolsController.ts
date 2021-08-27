@@ -85,26 +85,23 @@ export class SchoolsController {
     if (user.role !== "admin") {
       throw new Error("Insufficient permission. Only staffs can be created");
     }
-    if (requestUserRole === "superadmin" && !user.adminId) {
-      throw new Error("Missing field : adminId");
-    }
     if (user.role) {
       const role = await this.rolesService.findOne({ name: user.role });
       if (role?._id) {
         user.roleId = role?._id;
       }
     }
-    await this.usersService.save(user);
+    const nuser = await this.usersService.save(user);
     if (request.user) {
       school = {
         ...school,
-        createdBy: school.adminId || (request.user as any)._id,
+        createdBy: nuser._id,
       };
     }
     return this.schoolsService.save(school, {
       role: (request.user as any).role,
       _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      adminId: nuser._id,
     });
   }
 
@@ -133,7 +130,6 @@ export class SchoolsController {
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return school branches based on school id")
-  @Returns(200, School)
   async getSchoolSessions(
     @PathParams("id") id: string,
     @Req() request: Req
@@ -145,6 +141,8 @@ export class SchoolsController {
       throw new Error("You don't have sufficient permissions");
     }
     const school = await this.schoolsService.find(id);
-    return generateSessions(school?.startedAt);
+    const sessions = generateSessions(school?.startedAt);
+    console.log(sessions)
+    return sessions
   }
 }

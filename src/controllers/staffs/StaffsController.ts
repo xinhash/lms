@@ -91,11 +91,12 @@ export class StaffsController {
         user.roleId = role?._id;
       }
     }
-    await this.usersService.save(user);
+    const nuser = await this.usersService.save(user);
+    staff.user = nuser._id
     return this.staffsService.save(staff, {
       role: (request.user as any).role,
       _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      adminId: nuser._id,
     });
   }
 

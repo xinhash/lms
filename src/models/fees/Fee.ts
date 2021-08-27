@@ -3,6 +3,7 @@ import { Default, Enum, Groups, Property, Required } from "@tsed/schema";
 import { Grade } from "../grades/Grades";
 import { Medium } from "../mediums/Medium";
 import { School } from "../schools/School";
+import { Session } from "../sessions/Session";
 import { User } from "../users/User";
 
 @Schema()
@@ -43,6 +44,10 @@ export class Fee {
   @Enum("active", "inactive")
   @Default("active")
   status: string;
+
+  @Ref(Session)
+  @Required()
+  sessionId: Ref<Session>
 
   @Ref(User)
   createdBy?: Ref<User>;

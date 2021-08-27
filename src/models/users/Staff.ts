@@ -1,5 +1,5 @@
 import { Model, Ref, Schema } from "@tsed/mongoose";
-import { Default, Enum, Format, Required } from "@tsed/schema";
+import { Default, Enum, Format, Integer, Max, Min, Optional, Pattern, Required } from "@tsed/schema";
 import { User } from "./User";
 
 export enum StaffRoles {
@@ -22,10 +22,11 @@ enum ContractType {
 @Schema()
 class BankDetails {
   @Required()
+  @Integer()
   accountNumber: number;
 
   @Required()
-  ifscCode: number;
+  ifscCode: string;
 
   @Required()
   name: string;
@@ -37,8 +38,8 @@ class BankDetails {
 @Model({ schemaOptions: { timestamps: true } })
 export class Staff {
   @Ref(User)
-  @Required()
-  user: Ref<User>;
+  @Optional()
+  user?: Ref<User>;
 
   @Enum(StaffRoles)
   @Required()
@@ -62,12 +63,17 @@ export class Staff {
   qualifications: string[];
 
   @Required()
+  @Max(50)
+  @Min(0)
+  @Integer()
   workExperience: number;
 
   @Required()
   epfNo: number;
 
   @Required()
+  @Integer()
+  @Min(0)
   basicSalary: number;
 
   @Required()

@@ -19,7 +19,6 @@ export function generateSessions(refDate?: Date): string[] {
   var max = new Date().getFullYear()
   var min = new Date(refDate).getFullYear()
   var years = []
-
   for (var i = max; i >= min; i--) {
     years.push(`${i} - ${i+1}`)
   }
