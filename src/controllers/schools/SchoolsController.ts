@@ -142,7 +142,6 @@ export class SchoolsController {
     }
     const school = await this.schoolsService.find(id);
     const sessions = generateSessions(school?.startedAt);
-    console.log(sessions)
     return sessions
   }
 }
