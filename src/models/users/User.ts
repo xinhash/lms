@@ -25,26 +25,17 @@ import util from "util";
 import { Address } from "./Address";
 import { Role } from "./Role";
 import { SocialMediaAccount } from "./SocialMediaAccount";
+import { StaffRoles } from "./Staff";
 
 const getRandomBytes = util.promisify(crypto.randomBytes);
 
 enum Roles {
   SUPERADMIN = "superadmin",
   ADMIN = "admin",
-  TEACHER = "teacher",
   STUDENT = "student",
+  STAFF = "staff"
 }
 
-// @Groups<User>({
-//   // will generate UserCreate
-//   create: ["username", "email", "password", "role", "isActive", "isVerified"],
-//   read: ["username", "email", "password", "role", "isActive", "isVerified"],
-//   // will generate UserUpdate
-//   update: ["_id", "username", "email", "role", "isActive", "isVerified"],
-//   // will generate UserChangePassword
-//   changePassword: ["_id", "password"],
-//   login: ["email", "password"],
-// })
 @Model({ schemaOptions: { timestamps: true } })
 @PreHook("save", async (user: User, next: any) => {
   const salt = await getRandomBytes(32);

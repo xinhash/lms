@@ -19,11 +19,18 @@ import {
 } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Staff } from "src/models/users/Staff";
+import { User } from "src/models/users/User";
+import { RolesService } from "src/services/RolesService";
 import { StaffsService } from "src/services/StaffsService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/staffs")
 export class StaffsController {
-  constructor(private staffsService: StaffsService) {}
+  constructor(
+    private staffsService: StaffsService,
+    private usersService: UsersService,
+    private rolesService: RolesService
+  ) {}
 
   @Get("/")
   @Authorize("jwt")
@@ -63,12 +70,29 @@ export class StaffsController {
   @Returns(201, Staff)
   async createStaff(
     @Req() request: Req,
-    @Description("Staff model")
-    @BodyParams()
+    @BodyParams("user")
     @Groups("creation")
-    data: Staff
+    user: User,
+    @Description("Staff model")
+    @BodyParams("staff")
+    @Groups("creation")
+    staff: Staff
   ): Promise<Staff> {
-    return this.staffsService.save(data, {
+    const requestUserRole = (request.user as any).role;
+    if (user.role !== "staff") {
+      throw new Error("Insufficient permission. Only staffs can be created");
+    }
+    if (requestUserRole === "superadmin" && !user.adminId) {
+      throw new Error("Missing field : adminId");
+    }
+    if (user.role) {
+      const role = await this.rolesService.findOne({ name: user.role });
+      if (role?._id) {
+        user.roleId = role?._id;
+      }
+    }
+    await this.usersService.save(user);
+    return this.staffsService.save(staff, {
       role: (request.user as any).role,
       _id: (request.user as any)._id,
       adminId: (request.user as any).adminId,

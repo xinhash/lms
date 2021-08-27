@@ -2,7 +2,7 @@ import { Model, Ref, Schema } from "@tsed/mongoose";
 import { Default, Enum, Format, Required } from "@tsed/schema";
 import { User } from "./User";
 
-enum StaffRoles {
+export enum StaffRoles {
   ACCOUNTANT = "accountant",
   TEACHER = "teacher",
   LIBRARIAN = "librarian",

@@ -19,11 +19,8 @@ interface UserCreated {
 export class PermissionsService {
   @Inject(Permission) private permission: MongooseModel<Permission>;
 
-  @OnEvent("entity.created", {
-    /* optional: add any option you would normally pass to emitter.on("order.shipped", options) */
-  })
+  @OnEvent("entity.created", {})
   async addPermissionsToUser(event: UserCreated) {
-    console.log(event.user.role);
     if (!["superadmin"].includes(event.user.role)) {
       // create own permissions
       const pm = await this.findOrInitialize({

@@ -2,6 +2,7 @@ import {
   Indexed,
   Model,
   ObjectID,
+  PreHook,
   Ref,
   Schema,
   Trim,
@@ -19,11 +20,18 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { tenYearsAgo } from "src/utils";
 import { Package } from "../packages/Package";
 import { Address } from "../users/Address";
 import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
+@PreHook("save", async (school: School, next: any) => {
+  if(!school.startedAt) {
+    school.startedAt = tenYearsAgo()
+  }
+  next();
+})
 export class School {
   @Groups("!creation")
   @ObjectID("id")
@@ -73,4 +81,8 @@ export class School {
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")
   status: string;
+
+  @Optional()
+  @Format("date")
+  startedAt: Date;
 }

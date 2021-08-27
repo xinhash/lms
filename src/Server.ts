@@ -14,6 +14,7 @@ import "@tsed/event-emitter"; // import event emitter ts.ed module
 import { config, rootDir } from "./config";
 import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
+import path from "path";
 
 @Configuration({
   ...config,
@@ -35,7 +36,7 @@ import { User } from "./models/users/User";
     },
     {
       path: "/v3/docs",
-      specVersion: "3.0.1",
+      specVersion: "3.0.1"
     },
   ],
   views: {

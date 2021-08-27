@@ -1,4 +1,4 @@
-import { Service, Inject, $log } from "@tsed/common";
+import { Service, Inject } from "@tsed/common";
 import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { School } from "src/models/schools/School";
@@ -29,6 +29,10 @@ export class SchoolsService {
     this.eventEmitter.emit("entity.created", {
       user,
       moduleName: "School",
+    });
+    this.eventEmitter.emit("school.created", {
+      school,
+      user,
     });
     return school;
   }

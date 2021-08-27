@@ -75,7 +75,7 @@ export class UsersController {
     }
     if (
       requestUserRole === "superadmin" &&
-      ["teacher", "student"].includes(data.role) &&
+      ["staff", "student"].includes(data.role) &&
       !data.adminId
     ) {
       throw new Error("Missing field : adminId");
