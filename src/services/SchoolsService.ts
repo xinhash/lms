@@ -26,9 +26,9 @@ export class SchoolsService {
   async save(schoolObj: School, user: EntityCreationUser): Promise<School> {
     const school = new this.school(schoolObj);
     await school.save();
-    this.eventEmitter.emit("school.created", {
-      school,
+    this.eventEmitter.emit("entity.created", {
       user,
+      moduleName: "School",
     });
     return school;
   }
