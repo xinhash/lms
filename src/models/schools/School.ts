@@ -75,7 +75,7 @@ export class School {
   package: Ref<Package>;
 
   @Ref(User)
-  @Groups("!updation")
+  @Groups("!creation", "!updation")
   createdBy?: Ref<User>;
 
   adminId?: string

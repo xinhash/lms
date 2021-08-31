@@ -46,6 +46,6 @@ export class Subject {
   status: string;
 
   @Ref(User)
-  @Groups("!updation")
+  @Groups("!creation", "!updation")
   createdBy?: Ref<User>;
 }

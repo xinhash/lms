@@ -137,7 +137,7 @@ export class SchoolsController {
   @Get("/:id/sessions")
   @Authorize("jwt")
   @AcceptRoles("admin")
-  @Summary("Return school branches based on school id")
+  @Summary("Return sessions based on school id")
   async getSchoolSessions(
     @PathParams("id") id: string,
     @Req() request: Req

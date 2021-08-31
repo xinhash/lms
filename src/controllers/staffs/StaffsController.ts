@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  MultipartFile,
   PathParams,
+  PlatformMulterFile,
   Post,
   Put,
   Req,
@@ -76,8 +78,22 @@ export class StaffsController {
     @Description("Staff model")
     @BodyParams("staff")
     @Groups("creation")
-    staff: Staff
+    staff: Staff,
+    @MultipartFile("resume") resume: PlatformMulterFile,
+    @MultipartFile("joiningLetter") joiningLetter: PlatformMulterFile,
+    @MultipartFile("otherDocuments", 4) otherDocuments: PlatformMulterFile[]
+
   ): Promise<Staff> {
+    if(!resume || !joiningLetter) {
+      throw new Error('Insufficient data. Resume or Joining Letter')
+    } else {
+      staff.resume = resume.path;
+      staff.joiningLetter = joiningLetter.path;
+    }
+    if(otherDocuments) {
+      staff.otherDocuments = otherDocuments.map(doc => doc.path)
+    }
+
     const requestUserRole = (request.user as any).role;
     if (user.role !== "staff") {
       throw new Error("Insufficient permission. Only staffs can be created");
@@ -91,11 +107,15 @@ export class StaffsController {
         user.roleId = role?._id;
       }
     }
+    if (request.user) {
+      user.adminId = (request.user as any)._id;
+      user.createdBy = (request.user as any)._id;
+    }
     const nuser = await this.usersService.save(user);
     staff.user = nuser._id
     return this.staffsService.save(staff, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
+      role: nuser.role,
+      _id: nuser._id,
       adminId: nuser._id,
     });
   }

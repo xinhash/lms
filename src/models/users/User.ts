@@ -89,6 +89,7 @@ export class User {
 
   @Optional()
   @Ref(Role)
+  @Groups("!creation", "!updation")
   roleId: Ref<Role>;
 
   @Optional()
@@ -117,11 +118,11 @@ export class User {
   gender: string;
 
   @Ref(() => User)
-  @Groups("!updation")
+  @Groups("!creation", "!updation")
   createdBy: Ref<User>;
 
   @Ref(() => User)
-  @Groups("!updation")
+  @Groups("!creation", "!updation")
   adminId: Ref<User>;
 
   token: string;

@@ -1,4 +1,4 @@
-import { BodyParams, Req } from "@tsed/common";
+import { BodyParams, MultipartFile, PlatformMulterFile, Req } from "@tsed/common";
 import { OnInstall, OnVerify, Protocol } from "@tsed/passport";
 import { Strategy } from "passport-local";
 import { Forbidden } from "@tsed/exceptions";
@@ -23,7 +23,8 @@ export class SignupLocalProtocol implements OnVerify, OnInstall {
 
   async $onVerify(
     @Req() request: Req,
-    @BodyParams() @Groups("UserCreate") user: User
+    @BodyParams() @Groups("creation") user: User,
+    // @MultipartFile("photo") photo: PlatformMulterFile
   ) {
     const { email } = user;
     const found = await this.usersService.findOne({ email });
@@ -53,6 +54,9 @@ export class SignupLocalProtocol implements OnVerify, OnInstall {
         user.roleId = role?._id;
       }
     }
+    // if(photo.filename) {
+    //   user.photo = photo.filename
+    // }
     return this.usersService.save(user);
   }
 

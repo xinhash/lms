@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HeaderParams,
+  MultipartFile,
   PathParams,
+  PlatformMulterFile,
   Post,
   Req,
 } from "@tsed/common";
@@ -63,7 +65,8 @@ export class UsersController {
     @Description("User model")
     @BodyParams()
     @Groups("creation")
-    data: User
+    data: User,
+    // @MultipartFile("photo") photo: PlatformMulterFile
   ): Promise<User> {
     const requestUserRole = (request.user as any).role;
     if (data.role === "superadmin") {
@@ -86,6 +89,9 @@ export class UsersController {
         data.roleId = role?._id;
       }
     }
+    // if(photo.filename) {
+    //   data.photo = photo.filename
+    // }
     return this.usersService.save(data);
   }
 }

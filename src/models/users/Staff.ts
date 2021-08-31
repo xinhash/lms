@@ -86,14 +86,14 @@ export class Staff {
   @Required()
   workShift: string;
 
-  @Required()
+  @Optional()
   resume: string;
 
-  @Required()
-  joiningLetter: string;
+  @Optional()
+  joiningLetter?: string;
 
-  @Required()
-  otherDocuments: string[];
+  @Optional()
+  otherDocuments?: string[];
 
   @Enum("active", "inactive", "suspended")
   @Default("active")

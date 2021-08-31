@@ -26,7 +26,6 @@ export class AuthController {
   }
 
   @Get("/info")
-  @Security("oauth_jwt")
   @Authorize("jwt")
   @Returns(200, User)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

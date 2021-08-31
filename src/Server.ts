@@ -15,6 +15,13 @@ import { config, rootDir } from "./config";
 import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
 import path from "path";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  filename: function (_, file, cb) {
+    cb(null, new Date().getTime() + '_' + file.originalname)
+  },
+})
 
 @Configuration({
   ...config,
@@ -36,7 +43,19 @@ import path from "path";
     },
     {
       path: "/v3/docs",
-      specVersion: "3.0.1"
+      specVersion: "3.0.1",
+      // spec: {
+      //   components: {
+      //     securitySchemes: {
+      //       oauth_jwt: {
+      //         type: "http",
+      //         scheme: "bearer",
+      //         bearerFormat: "JWT",
+      //         description: "Bearer Token",
+      //       },
+      //     },
+      //   },
+      // },
     },
   ],
   views: {
@@ -52,6 +71,10 @@ import path from "path";
     // pass any options that you would normally pass to new EventEmitter2(), e.g.
     wildcard: true,
   },
+  multer: {
+    dest: `${rootDir}/../uploads`,
+    storage
+  }
 })
 export class Server {
   @Inject()
