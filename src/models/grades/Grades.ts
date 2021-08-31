@@ -11,6 +11,7 @@ import {
 } from "@tsed/schema";
 import { Course } from "../courses/Course";
 import { Section } from "../sections/Section";
+import { Subject } from "../subjects/Subject";
 import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
@@ -26,12 +27,17 @@ export class Grade {
   @Trim()
   name: string;
 
-  @Property(() => Course)
+  @Ref(() => Course)
   @Required()
-  courseId: string;
+  courseId: Ref<Course>;
 
+  @Ref(() => Section)
   @CollectionOf(Section)
-  sectionIds: Section[];
+  sectionIds: Ref<Section[]>;
+
+  @Ref(() => Subject)
+  @CollectionOf(Subject)
+  subjectIds: Ref<Subject[]>;
 
   @Property()
   @Enum("active", "inactive")

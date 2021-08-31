@@ -25,9 +25,9 @@ export class Section {
   @Trim()
   name: string;
 
-  @Property(() => Medium)
+  @Ref(() => Medium)
   @Required()
-  mediumId: string;
+  mediumId: Ref<Medium>;
 
   @Minimum(0)
   @Default(0)
