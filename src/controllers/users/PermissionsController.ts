@@ -81,7 +81,7 @@ export class PermissionsController {
   @Status(201, { description: "Updated permission", type: Permission })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() permission: Permission
+    @BodyParams() @Groups("updation") @Required() permission: Permission
   ): Promise<Permission | null> {
     return this.permissionsService.update(id, permission);
   }

@@ -85,7 +85,7 @@ export class CategoriesController {
   @Status(201, { description: "Updated category", type: Category })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() category: Category
+    @BodyParams() @Groups("updation") @Required() category: Category
   ): Promise<Category | null> {
     return this.categoriesService.update(id, category);
   }

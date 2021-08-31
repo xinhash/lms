@@ -85,7 +85,7 @@ export class SessionsController {
   @Status(201, { description: "Updated Session", type: Session })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Session: Session
+    @BodyParams() @Groups("updation") @Required() Session: Session
   ): Promise<Session | null> {
     return this.sessionsService.update(id, Session);
   }

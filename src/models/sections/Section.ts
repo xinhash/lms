@@ -14,7 +14,7 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Section {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -39,5 +39,6 @@ export class Section {
   status: string;
 
   @Ref(User)
+  @Groups("!updation")
   createdBy?: Ref<User>;
 }

@@ -85,7 +85,7 @@ export class CastesController {
   @Status(201, { description: "Updated Caste", type: Caste })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Caste: Caste
+    @BodyParams() @Groups("updation") @Required() Caste: Caste
   ): Promise<Caste | null> {
     return this.castesService.update(id, Caste);
   }

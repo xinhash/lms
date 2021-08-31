@@ -34,7 +34,7 @@ import { User } from "../users/User";
   next();
 })
 export class School {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -75,6 +75,7 @@ export class School {
   package: Ref<Package>;
 
   @Ref(User)
+  @Groups("!updation")
   createdBy?: Ref<User>;
 
   adminId?: string

@@ -85,7 +85,7 @@ export class SubjectsController {
   @Status(201, { description: "Updated subject", type: Subject })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() subject: Subject
+    @BodyParams() @Groups("updation") @Required() subject: Subject
   ): Promise<Subject | null> {
     return this.subjectsService.update(id, subject);
   }

@@ -85,7 +85,7 @@ export class SectionsController {
   @Status(201, { description: "Updated Section", type: Section })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() Section: Section
+    @BodyParams() @Groups("updation") @Required() Section: Section
   ): Promise<Section | null> {
     return this.sectionsService.update(id, Section);
   }

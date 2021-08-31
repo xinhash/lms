@@ -11,7 +11,7 @@ enum Roles {
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Role {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -20,5 +20,6 @@ export class Role {
   name: string;
 
   @Ref(() => User)
+  @Groups("!updation")
   createdBy?: Ref<User>;
 }

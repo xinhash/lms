@@ -46,7 +46,7 @@ enum Roles {
   next();
 })
 export class User {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -117,9 +117,11 @@ export class User {
   gender: string;
 
   @Ref(() => User)
+  @Groups("!updation")
   createdBy: Ref<User>;
 
   @Ref(() => User)
+  @Groups("!updation")
   adminId: Ref<User>;
 
   token: string;

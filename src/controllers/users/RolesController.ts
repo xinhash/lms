@@ -81,7 +81,7 @@ export class RolesController {
   @Status(201, { description: "Updated role", type: Role })
   update(
     @PathParams("id") @Required() id: string,
-    @BodyParams() @Required() role: Role
+    @BodyParams() @Groups("updation") @Required() role: Role
   ): Promise<Role | null> {
     return this.rolesService.update(id, role);
   }

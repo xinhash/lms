@@ -16,7 +16,7 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Grade {
-  @Groups("!creation")
+  @Groups("!creation", "!updation")
   @ObjectID("id")
   _id: string;
 
