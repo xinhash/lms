@@ -2,6 +2,7 @@ import {
   Indexed,
   Model,
   ObjectID,
+  PostHook,
   PreHook,
   Ref,
   Schema,
@@ -20,7 +21,7 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
-import { tenYearsAgo } from "src/utils";
+import { generateSessions, tenYearsAgo } from "src/utils";
 import { Package } from "../packages/Package";
 import { Address } from "../users/Address";
 import { User } from "../users/User";

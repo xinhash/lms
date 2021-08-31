@@ -23,6 +23,7 @@ import { School } from "src/models/schools/School";
 import { User } from "src/models/users/User";
 import { RolesService } from "src/services/RolesService";
 import { SchoolsService } from "src/services/SchoolsService";
+import { SessionsService } from "src/services/SessionsService";
 import { UsersService } from "src/services/UsersService";
 import { generateSessions } from "src/utils";
 
@@ -31,7 +32,8 @@ export class SchoolsController {
   constructor(
     private schoolsService: SchoolsService,
     private rolesService: RolesService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private sessionService: SessionsService
   ) {}
 
   @Get("/")
@@ -91,16 +93,22 @@ export class SchoolsController {
         user.roleId = role?._id;
       }
     }
-    const nuser = await this.usersService.save(user);
     if (request.user) {
+      user.adminId = (request.user as any)._id;
+      user.createdBy = (request.user as any)._id;
+    }
+    const nuser = await this.usersService.save(user);
+    if (!nuser) {
+      throw new Error("Unable to create school admin");
+    } else {
       school = {
         ...school,
         createdBy: nuser._id,
       };
     }
     return this.schoolsService.save(school, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
+      role: nuser.role,
+      _id: nuser._id,
       adminId: nuser._id,
     });
   }
@@ -141,7 +149,26 @@ export class SchoolsController {
       throw new Error("You don't have sufficient permissions");
     }
     const school = await this.schoolsService.find(id);
-    const sessions = generateSessions(school?.startedAt);
-    return sessions
+    if (!school) {
+      throw new Error(`Unable to find session for school with id: ${id}`);
+    } else {
+      const sessions = generateSessions(school.startedAt);
+      await Promise.all(
+        sessions.map((session) =>
+          this.sessionService.save(
+            {
+              schoolId: school._id,
+              name: session,
+            },
+            {
+              role: (request.user as any).role,
+              _id: (request.user as any)._id,
+              adminId: (request.user as any).adminId,
+            }
+          )
+        )
+      );
+      return sessions;
+    }
   }
 }

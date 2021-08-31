@@ -16,18 +16,8 @@ export class SessionsService {
   @Inject(Session) private Session: MongooseModel<Session>;
   @Inject() private eventEmitter: EventEmitterService;
 
-  @OnEvent("school.created", {})
-  async createSchoolSessions({school, user}: SchoolCreated) {
-    const sessions = generateSessions(school.startedAt)
-    await Promise.all(sessions.map(session => this.save({
-        schoolId: school._id,
-        name: session
-      }, user)))
-  }
-
   async find(id: string): Promise<Session | null> {
     const session = await this.Session.findById(id).exec();
-
     return session;
   }
 
