@@ -32,7 +32,7 @@ export class FeesService {
       Fee.status = data.status;
       await Fee.save();
     }
-    return Fee;
+    return null;
   }
 
   async query(options = {}): Promise<Fee[]> {

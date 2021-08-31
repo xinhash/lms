@@ -36,7 +36,7 @@ export class CategoriesService {
       return category;
     }
 
-    return category;
+    return null;
   }
 
   async query(options = {}): Promise<Category[]> {

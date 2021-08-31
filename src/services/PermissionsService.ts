@@ -92,7 +92,7 @@ export class PermissionsService {
       return permission;
     }
 
-    return permission;
+    return null;
   }
 
   async remove(id: string): Promise<Permission> {

@@ -37,6 +37,9 @@ export class Subject {
   @Required()
   gradeId: Ref<Grade>;
 
+  @Required()
+  format: string;
+
   @Property()
   @Enum("active", "inactive")
   @Default("active")

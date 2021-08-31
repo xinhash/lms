@@ -27,16 +27,11 @@ export class StaffsService {
 
   async update(id: string, data: Staff): Promise<Staff | null> {
     const staff = await this.staff.findById(id).exec();
-    // if (staff) {
-    //   staff.student = data.student;
-    //   staff.grade = data.grade;
-    //   staff.section = data.section;
-    //   staff.text = data.text;
-    //   staff.date = data.date;
-    //   staff.status = data.status;
-    //   await staff.save();
-    // }
-    return staff;
+    if (staff) {
+      staff.status = data.status;
+      await staff.save();
+    }
+    return null;
   }
 
   async query(options = {}): Promise<Staff[]> {

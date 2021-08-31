@@ -43,7 +43,7 @@ export class NationalitiesService {
       return nationality;
     }
 
-    return nationality;
+    return null;
   }
 
   async query(options = {}): Promise<Nationality[]> {

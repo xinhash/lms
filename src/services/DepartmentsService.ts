@@ -11,29 +11,30 @@ export class DepartmentsService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Department | null> {
-    const Department = await this.department.findById(id).exec();
-
-    return Department;
+    const department = await this.department.findById(id).exec();
+    return department;
   }
 
   async save(data: Department, user: EntityCreationUser): Promise<Department> {
-    const Department = new this.department(data);
-    await Department.save();
+    const department = new this.department(data);
+    await department.save();
     this.eventEmitter.emit("entity.created", {
       user,
       moduleName: "Department",
     });
-    return Department;
+    return department;
   }
 
   async update(id: string, data: Department): Promise<Department | null> {
-    const Department = await this.department.findById(id).exec();
-    if (Department) {
-      Department.name = data.name;
-      Department.status = data.status;
-      await Department.save();
+    const department = await this.department.findById(id).exec();
+    if (department) {
+      department.name = data.name;
+      department.status = data.status;
+      await department.save();
+      return department
+
     }
-    return Department;
+    return null;
   }
 
   async query(options = {}): Promise<Department[]> {

@@ -40,7 +40,7 @@ export class SessionsService {
       return session;
     }
 
-    return session;
+    return null;
   }
 
   async query(options = {}): Promise<Session[]> {

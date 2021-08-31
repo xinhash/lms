@@ -40,7 +40,7 @@ export class ReligionsService {
       return religion;
     }
 
-    return religion;
+    return null;
   }
 
   async query(options = {}): Promise<Religion[]> {

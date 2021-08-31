@@ -16,27 +16,28 @@ export class AttendancesService {
   }
 
   async save(data: Attendance, user: EntityCreationUser): Promise<Attendance> {
-    const Attendance = new this.attendance(data);
-    await Attendance.save();
+    const attendance = new this.attendance(data);
+    await attendance.save();
     this.eventEmitter.emit("entity.created", {
       user,
       moduleName: "Attendance",
     });
-    return Attendance;
+    return attendance;
   }
 
   async update(id: string, data: Attendance): Promise<Attendance | null> {
-    const Attendance = await this.attendance.findById(id).exec();
-    if (Attendance) {
-      Attendance.student = data.student;
-      Attendance.grade = data.grade;
-      Attendance.section = data.section;
-      Attendance.text = data.text;
-      Attendance.date = data.date;
-      Attendance.status = data.status;
-      await Attendance.save();
+    const attendance = await this.attendance.findById(id).exec();
+    if (attendance) {
+      attendance.student = data.student;
+      attendance.grade = data.grade;
+      attendance.section = data.section;
+      attendance.text = data.text;
+      attendance.date = data.date;
+      attendance.status = data.status;
+      await attendance.save();
+      return attendance;
     }
-    return Attendance;
+    return null;
   }
 
   async query(options = {}): Promise<Attendance[]> {

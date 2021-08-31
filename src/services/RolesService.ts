@@ -51,7 +51,7 @@ export class RolesService {
       return role;
     }
 
-    return role;
+    return null;
   }
 
   async remove(id: string): Promise<Role> {

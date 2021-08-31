@@ -7,38 +7,39 @@ import { EntityCreationUser } from "./PermissionsService";
 
 @Service()
 export class CastesService {
-  @Inject(Caste) private Caste: MongooseModel<Caste>;
+  @Inject(Caste) private caste: MongooseModel<Caste>;
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Caste | null> {
-    const Caste = await this.Caste.findById(id).exec();
+    const caste = await this.caste.findById(id).exec();
 
-    return Caste;
+    return caste;
   }
 
   async save(casteObj: Caste, user: EntityCreationUser): Promise<Caste> {
-    const Caste = new this.Caste(casteObj);
-    await Caste.save();
+    const caste = new this.caste(casteObj);
+    await caste.save();
     this.eventEmitter.emit("entity.created", { user, moduleName: "Caste" });
-    return Caste;
+    return caste;
   }
 
   async update(id: string, casteObj: Caste): Promise<Caste | null> {
-    const Caste = await this.Caste.findById(id).exec();
-    if (Caste) {
-      Caste.name = casteObj.name;
-      Caste.status = casteObj.status;
-      await Caste.save();
+    const caste = await this.caste.findById(id).exec();
+    if (caste) {
+      caste.name = casteObj.name;
+      caste.status = casteObj.status;
+      await caste.save();
+      return caste;
     }
-    return Caste;
+    return null;
   }
 
   async query(options = {}): Promise<Caste[]> {
     options = objectDefined(options);
-    return this.Caste.find(options).exec();
+    return this.caste.find(options).exec();
   }
 
   async remove(id: string): Promise<Caste> {
-    return await this.Caste.findById(id).remove().exec();
+    return await this.caste.findById(id).remove().exec();
   }
 }

@@ -48,7 +48,7 @@ export class SchoolsService {
       return school;
     }
 
-    return school;
+    return null;
   }
 
   async query(options = {}): Promise<School[]> {
