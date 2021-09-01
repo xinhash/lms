@@ -84,6 +84,9 @@ export class SchoolsController {
     school: School
   ): Promise<School> {
     const requestUserRole = (request.user as any).role;
+    if(!user.role) {
+      user.role = "admin"
+    }
     if (user.role !== "admin") {
       throw new Error("Insufficient permission. Only staffs can be created");
     }

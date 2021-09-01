@@ -79,20 +79,20 @@ export class StaffsController {
     @BodyParams("staff")
     @Groups("creation")
     staff: Staff,
-    @MultipartFile("resume") resume: PlatformMulterFile,
-    @MultipartFile("joiningLetter") joiningLetter: PlatformMulterFile,
-    @MultipartFile("otherDocuments", 4) otherDocuments: PlatformMulterFile[]
+    // @MultipartFile("resume") resume: PlatformMulterFile,
+    // @MultipartFile("joiningLetter") joiningLetter: PlatformMulterFile,
+    // @MultipartFile("otherDocuments", 4) otherDocuments: PlatformMulterFile[]
 
   ): Promise<Staff> {
-    if(!resume || !joiningLetter) {
-      throw new Error('Insufficient data. Resume or Joining Letter')
-    } else {
-      staff.resume = resume.path;
-      staff.joiningLetter = joiningLetter.path;
-    }
-    if(otherDocuments) {
-      staff.otherDocuments = otherDocuments.map(doc => doc.path)
-    }
+    // if(!resume || !joiningLetter) {
+    //   throw new Error('Insufficient data. Resume or Joining Letter')
+    // } else {
+    //   staff.resume = resume.path;
+    //   staff.joiningLetter = joiningLetter.path;
+    // }
+    // if(otherDocuments) {
+    //   staff.otherDocuments = otherDocuments.map(doc => doc.path)
+    // }
 
     const requestUserRole = (request.user as any).role;
     if (user.role !== "staff") {

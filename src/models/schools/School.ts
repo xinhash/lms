@@ -12,6 +12,7 @@ import {
 import {
   Default,
   Enum,
+  Example,
   Format,
   Groups,
   MaxLength,
@@ -30,6 +31,9 @@ import { User } from "../users/User";
 @PreHook("save", async (school: School, next: any) => {
   if(!school.startedAt) {
     school.startedAt = tenYearsAgo()
+  }
+  if(school.isMainBranch) {
+    school.mainBranch = school._id
   }
   next();
 })
@@ -56,7 +60,8 @@ export class School {
 
   @Property()
   @Required()
-  @Pattern(/^[6-9]\d{9}$/)
+  @Pattern(/^[6-9]{1}[0-9]{9}$/)
+  @Example(9899999999)
   phoneNumber: number;
 
   @Enum("multi", "single")
@@ -68,7 +73,7 @@ export class School {
   isMainBranch: boolean;
 
   @Ref(() => School)
-  mainBranch: Ref<School>;
+  mainBranch?: Ref<School>;
 
   @Ref(Package)
   @Required()

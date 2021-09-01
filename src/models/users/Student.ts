@@ -16,8 +16,7 @@ export class Student {
   rollNumber: number;
 
   @Ref(Grade)
-  @Optional()
-  grade: Ref<Grade>;
+  grade?: Ref<Grade>;
 
   @Ref(Session)
   @Required()

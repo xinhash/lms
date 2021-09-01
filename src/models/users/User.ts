@@ -11,10 +11,12 @@ import {
   Default,
   Email,
   Enum,
+  Example,
   Format,
   Groups,
   MaxLength,
   MinLength,
+  Nullable,
   Optional,
   Pattern,
   Required,
@@ -62,21 +64,17 @@ export class User {
   @Trim()
   email: string;
 
-  @Optional()
-  @Required()
-  @Pattern(/^[6-9]\d{9}$/)
-  phoneNumber: number;
+  @Pattern(/^[6-9]{1}[0-9]{9}$/)
+  @Example(9899999999)
+  phoneNumber?: number;
 
-  @Optional()
+  @Nullable(Date)
   @Format("date")
-  @Required()
-  dateOfBirth: Date;
+  dateOfBirth?: Date | null;
 
-  @Optional()
-  currentAddress: Address;
+  currentAddress?: Address;
 
-  @Optional()
-  permanentAddress: Address;
+  permanentAddress?: Address;
 
   @Required()
   @MinLength(4)
@@ -87,35 +85,29 @@ export class User {
   @Default("admin")
   role: string;
 
-  @Optional()
   @Ref(Role)
   @Groups("!creation", "!updation")
-  roleId: Ref<Role>;
+  roleId?: Ref<Role>;
 
-  @Optional()
+  @Groups("updation")
   @Default(true)
   isActive?: boolean;
 
-  @Optional()
+  @Groups("updation")
   @Default(true)
   isVerified: boolean;
 
-  @Optional()
-  fatherName: string;
+  fatherName?: string;
 
-  @Optional()
-  motherName: string;
+  motherName?: string;
 
-  @Optional()
-  socialMediaAccount: SocialMediaAccount;
+  socialMediaAccount?: SocialMediaAccount;
 
-  @Optional()
-  photo: string;
+  photo?: string;
 
   @Enum("male", "female")
-  @Optional()
   @Default("male")
-  gender: string;
+  gender?: string;
 
   @Ref(() => User)
   @Groups("!creation", "!updation")

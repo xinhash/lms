@@ -40,19 +40,15 @@ export class Permission {
   @Property()
   updateAttributes?: string[] = [];
 
-  @Optional()
   @Default(false)
-  canCreate: boolean = false;
+  canCreate?: boolean = false;
 
-  @Optional()
   @Default(true)
-  canRead: boolean = true;
+  canRead?: boolean = true;
 
-  @Optional()
   @Default(false)
-  canUpdate: boolean = false;
+  canUpdate?: boolean = false;
 
-  @Optional()
   @Default(false)
-  canDelete: boolean = false;
+  canDelete?: boolean = false;
 }

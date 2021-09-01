@@ -3,19 +3,15 @@ import { MaxLength, MinLength, Optional, Required } from "@tsed/schema";
 
 @Schema()
 export class SocialMediaAccount {
-  @Optional()
   @Trim()
-  facebook: string;
+  facebook?: string;
 
-  @Optional()
   @Trim()
-  twitter: string;
+  twitter?: string;
 
-  @Optional()
   @Trim()
-  linked: string;
+  linked?: string;
 
-  @Optional()
   @Trim()
-  instagram: string;
+  instagram?: string;
 }
