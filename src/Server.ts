@@ -44,18 +44,18 @@ const storage = multer.diskStorage({
     {
       path: "/v3/docs",
       specVersion: "3.0.1",
-      // spec: {
-      //   components: {
-      //     securitySchemes: {
-      //       oauth_jwt: {
-      //         type: "http",
-      //         scheme: "bearer",
-      //         bearerFormat: "JWT",
-      //         description: "Bearer Token",
-      //       },
-      //     },
-      //   },
-      // },
+      spec: {
+        components: {
+          securitySchemes: {
+            oauth_jwt: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
+              description: "Bearer Token",
+            },
+          },
+        },
+      },
     },
   ],
   views: {

@@ -15,6 +15,7 @@ import {
   Groups,
   Required,
   Returns,
+  Security,
   Status,
   Summary,
 } from "@tsed/schema";
@@ -27,6 +28,7 @@ export class PackagesController {
   constructor(private packagesService: PackagesService) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Packages")
@@ -40,6 +42,7 @@ export class PackagesController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Package based on id")
@@ -58,6 +61,7 @@ export class PackagesController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Package")
@@ -80,6 +84,7 @@ export class PackagesController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Package with id")
@@ -92,6 +97,7 @@ export class PackagesController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Package")

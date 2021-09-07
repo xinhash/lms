@@ -9,6 +9,7 @@ import {
   Property,
   Required,
 } from "@tsed/schema";
+import { Grade } from "../grades/Grades";
 import { Medium } from "../mediums/Medium";
 import { User } from "../users/User";
 
@@ -20,14 +21,18 @@ export class Section {
 
   @Property()
   @Required()
-  @MinLength(3)
+  @MinLength(1)
   @MaxLength(50)
   @Trim()
   name: string;
 
   @Ref(() => Medium)
   @Required()
-  mediumId: Ref<Medium>;
+  medium: Ref<Medium>;
+
+  @Ref(() => Grade)
+  @Required()
+  grade: Ref<Grade>;
 
   @Minimum(0)
   @Default(0)

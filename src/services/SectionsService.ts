@@ -1,4 +1,4 @@
-import { Service, Inject, $log } from "@tsed/common";
+import { Service, Inject } from "@tsed/common";
 import { EventEmitterService } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
 import { Section } from "src/models/sections/Section";
@@ -11,7 +11,7 @@ export class SectionsService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Section | null> {
-    const section = await this.section.findById(id).exec();
+    const section = await this.section.findById(id).populate("medium").exec();
 
     return section;
   }
@@ -23,6 +23,9 @@ export class SectionsService {
       user,
       moduleName: "School",
     });
+    this.eventEmitter.emit("section.created", {
+      section,
+    });
     return section;
   }
 
@@ -31,8 +34,9 @@ export class SectionsService {
     if (section) {
       section.name = sectionObj.name;
       section.status = sectionObj.status;
-      section.mediumId = sectionObj.mediumId;
+      section.medium = sectionObj.medium;
       section.noOfStudents = sectionObj.noOfStudents;
+      section.grade = sectionObj.grade;
       await section.save();
 
       return section;
@@ -43,7 +47,7 @@ export class SectionsService {
 
   async query(options = {}): Promise<Section[]> {
     options = objectDefined(options);
-    return this.section.find(options).exec();
+    return this.section.find(options).populate("medium").exec();
   }
 
   async remove(id: string): Promise<Section> {

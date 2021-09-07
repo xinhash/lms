@@ -14,6 +14,7 @@ import {
   Groups,
   Required,
   Returns,
+  Security,
   Status,
   Summary,
 } from "@tsed/schema";
@@ -26,6 +27,7 @@ export class CastesController {
   constructor(private castesService: CastesService) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Castes")
@@ -39,6 +41,7 @@ export class CastesController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Caste based on id")
@@ -57,6 +60,7 @@ export class CastesController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Caste")
@@ -79,6 +83,7 @@ export class CastesController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Caste with id")
@@ -91,6 +96,7 @@ export class CastesController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Caste")

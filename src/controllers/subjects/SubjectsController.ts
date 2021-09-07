@@ -14,6 +14,7 @@ import {
   Groups,
   Required,
   Returns,
+  Security,
   Status,
   Summary,
 } from "@tsed/schema";
@@ -26,6 +27,7 @@ export class SubjectsController {
   constructor(private subjectsService: SubjectsService) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all subjects")
@@ -39,6 +41,7 @@ export class SubjectsController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return subject based on id")
@@ -57,6 +60,7 @@ export class SubjectsController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new subject")
@@ -79,6 +83,7 @@ export class SubjectsController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update subject with id")
@@ -91,6 +96,7 @@ export class SubjectsController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a subject")

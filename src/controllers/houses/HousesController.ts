@@ -14,6 +14,7 @@ import {
   Groups,
   Required,
   Returns,
+  Security,
   Status,
   Summary,
 } from "@tsed/schema";
@@ -26,6 +27,7 @@ export class HousesController {
   constructor(private housesService: HousesService) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Houses")
@@ -39,6 +41,7 @@ export class HousesController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return House based on id")
@@ -57,6 +60,7 @@ export class HousesController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new House")
@@ -79,6 +83,7 @@ export class HousesController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update House with id")
@@ -91,6 +96,7 @@ export class HousesController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a House")

@@ -35,10 +35,10 @@ export class Subject {
 
   @Ref(() => Grade)
   @Required()
-  gradeId: Ref<Grade>;
+  grade: Ref<Grade>;
 
-  @Required()
-  format: string;
+  // @Required()
+  // format: string;
 
   @Property()
   @Enum("active", "inactive")

@@ -8,7 +8,7 @@ import { User } from "../users/User";
 export class Session {
 	@Ref(School)
 	@Required()
-	schoolId: Ref<School>
+	school: Ref<School>
 
 	@Required()
 	name: string

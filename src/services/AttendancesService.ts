@@ -11,7 +11,12 @@ export class AttendancesService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Attendance | null> {
-    const Attendance = await this.attendance.findById(id).exec();
+    const Attendance = await this.attendance
+      .findById(id)
+      .populate("student")
+      .populate("grade")
+      .populate("sections")
+      .exec();
     return Attendance;
   }
 
@@ -42,7 +47,12 @@ export class AttendancesService {
 
   async query(options = {}): Promise<Attendance[]> {
     options = objectDefined(options);
-    return this.attendance.find(options).exec();
+    return this.attendance
+      .find(options)
+      .populate("student")
+      .populate("grade")
+      .populate("sections")
+      .exec();
   }
 
   async remove(id: string): Promise<Attendance> {

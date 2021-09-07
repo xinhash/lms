@@ -10,7 +10,7 @@ import {
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Returns, Summary, Groups } from "@tsed/schema";
+import { Description, Returns, Summary, Groups, Security } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { CheckPermissions } from "src/decorators/CheckPermissions";
 import { User } from "src/models/users/User";
@@ -26,6 +26,8 @@ export class UsersController {
   ) {}
 
   @Get("/")
+  @Security('oauth_jwt')
+  @Authorize("jwt")
   @CheckPermissions("User")
   @Summary("Return all users")
   @Returns(200, User)
@@ -38,6 +40,8 @@ export class UsersController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
+  @Authorize("jwt")
   @CheckPermissions("User")
   @Summary("Return User based on id")
   @Returns(200, User)
@@ -56,7 +60,9 @@ export class UsersController {
   }
 
   @Post("/")
-  @AcceptRoles("admin")
+  @Security('oauth_jwt')
+  @Authorize("jwt")
+  @AcceptRoles("superadmin")
   @Summary("Create new user")
   @Returns(201, User)
   async createUser(

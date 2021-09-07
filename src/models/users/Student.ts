@@ -20,5 +20,5 @@ export class Student {
 
   @Ref(Session)
   @Required()
-  sessionId: Ref<Session>
+  session: Ref<Session>
 }

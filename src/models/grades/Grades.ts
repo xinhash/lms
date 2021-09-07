@@ -22,28 +22,30 @@ export class Grade {
 
   @Property()
   @Required()
-  @MinLength(3)
+  @MinLength(1)
   @MaxLength(50)
   @Trim()
   name: string;
 
   @Ref(() => Course)
   @Required()
-  courseId: Ref<Course>;
+  course: Ref<Course>;
 
+  @Groups("!creation")
   @Ref(() => Section)
-  @CollectionOf(Section)
-  sectionIds: Ref<Section[]>;
+  @CollectionOf(() => Section)
+  sections?: Ref<Section>[];
 
+  @Groups("!creation")
   @Ref(() => Subject)
-  @CollectionOf(Subject)
-  subjectIds: Ref<Subject[]>;
+  @CollectionOf(() => Subject)
+  subjects?: Ref<Subject>[];
 
-  @Property()
   @Enum("active", "inactive")
   @Default("active")
   status: string;
 
   @Ref(User)
+  @Groups("!creation", "!updation")
   createdBy: Ref<User>;
 }

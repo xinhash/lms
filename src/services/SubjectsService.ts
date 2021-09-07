@@ -11,20 +11,20 @@ export class SubjectsService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Subject | null> {
-    const subject = await this.subject.findById(id).exec();
+    const subject = await this.subject.findById(id).populate("grade").exec();
 
     return subject;
   }
 
-  async save(
-    subjectObj: Subject,
-    user: EntityCreationUser
-  ): Promise<Subject> {
+  async save(subjectObj: Subject, user: EntityCreationUser): Promise<Subject> {
     const subject = new this.subject(subjectObj);
     await subject.save();
     this.eventEmitter.emit("entity.created", {
       user,
       moduleName: "Subject",
+    });
+    this.eventEmitter.emit("subject.created", {
+      subject,
     });
     return subject;
   }
@@ -35,9 +35,9 @@ export class SubjectsService {
       subject.name = subjectObj.name;
       subject.code = subjectObj.code;
       subject.type = subjectObj.type;
-      subject.gradeId = subjectObj.gradeId;
+      subject.grade = subjectObj.grade;
       subject.status = subjectObj.status;
-      subject.format = subjectObj.format;
+      // subject.format = subjectObj.format;
 
       await subject.save();
 
@@ -49,7 +49,7 @@ export class SubjectsService {
 
   async query(options = {}): Promise<Subject[]> {
     options = objectDefined(options);
-    return this.subject.find(options).exec();
+    return this.subject.find(options).populate("grade").exec();
   }
 
   async remove(id: string): Promise<Subject> {

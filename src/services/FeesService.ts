@@ -11,7 +11,13 @@ export class FeesService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Fee | null> {
-    const Fee = await this.fee.findById(id).exec();
+    const Fee = await this.fee
+      .findById(id)
+      .populate("school")
+      .populate("grade")
+      .populate("medium")
+      .populate("session")
+      .exec();
     return Fee;
   }
 
@@ -37,7 +43,13 @@ export class FeesService {
 
   async query(options = {}): Promise<Fee[]> {
     options = objectDefined(options);
-    return this.fee.find(options).exec();
+    return this.fee
+      .find(options)
+      .populate("school")
+      .populate("grade")
+      .populate("medium")
+      .populate("session")
+      .exec();
   }
 
   async remove(id: string): Promise<Fee> {

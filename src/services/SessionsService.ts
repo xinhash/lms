@@ -8,7 +8,7 @@ import { EntityCreationUser } from "./PermissionsService";
 
 interface SchoolCreated {
   school: School;
-  user: EntityCreationUser
+  user: EntityCreationUser;
 }
 
 @Service()
@@ -17,7 +17,7 @@ export class SessionsService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<Session | null> {
-    const session = await this.Session.findById(id).exec();
+    const session = await this.Session.findById(id).populate("school").exec();
     return session;
   }
 
@@ -32,7 +32,7 @@ export class SessionsService {
   }
 
   async update(id: string, sessionObj: Session): Promise<Session | null> {
-    const session = await this.Session.findById(id).exec();
+    const session = await this.Session.findById(id).populate("medium").exec();
     if (session) {
       session.description = sessionObj.description;
       await session.save();

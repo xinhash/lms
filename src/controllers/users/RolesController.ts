@@ -16,6 +16,7 @@ import {
   Summary,
   Groups,
   Status,
+  Security,
 } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Role } from "src/models/users/Role";
@@ -26,6 +27,7 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Return all roles")
@@ -39,6 +41,7 @@ export class RolesController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Return role based on id")
@@ -57,6 +60,7 @@ export class RolesController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Create new role")
@@ -75,6 +79,7 @@ export class RolesController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Update role with id")
@@ -87,6 +92,7 @@ export class RolesController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Remove a role")

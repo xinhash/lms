@@ -11,7 +11,11 @@ export class SchoolsService {
   @Inject() private eventEmitter: EventEmitterService;
 
   async find(id: string): Promise<School | null> {
-    const school = await this.school.findById(id).exec();
+    const school = await this.school
+      .findById(id)
+      .populate("mainBranch")
+      .populate("package")
+      .exec();
     return school;
   }
 
@@ -53,7 +57,11 @@ export class SchoolsService {
 
   async query(options = {}): Promise<School[]> {
     options = objectDefined(options);
-    return this.school.find(options).exec();
+    return this.school
+      .find(options)
+      .populate("mainBranch")
+      .populate("package")
+      .exec();
   }
 
   async remove(id: string): Promise<School> {

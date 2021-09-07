@@ -15,6 +15,7 @@ import {
   Groups,
   Required,
   Returns,
+  Security,
   Status,
   Summary,
 } from "@tsed/schema";
@@ -37,6 +38,7 @@ export class SchoolsController {
   ) {}
 
   @Get("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all schools")
@@ -50,6 +52,7 @@ export class SchoolsController {
   }
 
   @Get("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return school branches based on school id")
@@ -68,6 +71,7 @@ export class SchoolsController {
   }
 
   @Post("/")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new school")
@@ -117,6 +121,7 @@ export class SchoolsController {
   }
 
   @Put("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update school with id")
@@ -129,6 +134,7 @@ export class SchoolsController {
   }
 
   @Delete("/:id")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a school")
@@ -138,6 +144,7 @@ export class SchoolsController {
   }
 
   @Get("/:id/sessions")
+  @Security('oauth_jwt')
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return sessions based on school id")
@@ -160,7 +167,7 @@ export class SchoolsController {
         sessions.map((session) =>
           this.sessionService.save(
             {
-              schoolId: school._id,
+              school: school._id,
               name: session,
             },
             {
