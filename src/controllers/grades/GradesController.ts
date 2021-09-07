@@ -20,11 +20,17 @@ import {
 } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Grade } from "src/models/grades/Grades";
+import { CoursesService } from "src/services/CoursesService";
 import { GradesService } from "src/services/GradesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/grades")
 export class GradesController {
-  constructor(private gradesService: GradesService) {}
+  constructor(
+    private gradesService: GradesService,
+    private coursesService: CoursesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
   @Security("oauth_jwt")
@@ -67,18 +73,26 @@ export class GradesController {
   @Returns(201, Grade)
   async createGrade(
     @Req() request: Req,
+    @Required()
     @Description("Grade model")
-    @BodyParams()
+    @BodyParams("grade")
     @Groups("creation")
-    data: Grade
+    grade: Grade
   ): Promise<Grade> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(grade.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${grade.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
-    return this.gradesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+    const course = await this.coursesService.find(grade.course.toString());
+    if (!course) {
+      throw new Error(`This course doesn't exist`);
+    }
+    return this.gradesService.save(grade, {
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 

@@ -1,4 +1,4 @@
-import { Model, ObjectID, Ref, Trim } from "@tsed/mongoose";
+import { Model, ObjectID, Ref, Trim, Unique } from "@tsed/mongoose";
 import {
   Default,
   Enum,
@@ -19,7 +19,7 @@ export class Section {
   @ObjectID("id")
   _id: string;
 
-  @Property()
+  @Unique()
   @Required()
   @MinLength(1)
   @MaxLength(50)
@@ -44,6 +44,6 @@ export class Section {
   status: string;
 
   @Ref(User)
-  @Groups("!creation", "!updation")
-  createdBy?: Ref<User>;
+  @Groups("!updation")
+  createdBy: Ref<User>;
 }

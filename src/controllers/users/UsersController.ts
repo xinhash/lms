@@ -26,7 +26,7 @@ export class UsersController {
   ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @CheckPermissions("User")
   @Summary("Return all users")
@@ -40,7 +40,7 @@ export class UsersController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @CheckPermissions("User")
   @Summary("Return User based on id")
@@ -60,18 +60,17 @@ export class UsersController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("superadmin")
   @Summary("Create new user")
   @Returns(201, User)
   async createUser(
     @Req() request: Req,
-    @HeaderParams("authorization") token: string,
     @Description("User model")
     @BodyParams()
     @Groups("creation")
-    data: User,
+    data: User
     // @MultipartFile("photo") photo: PlatformMulterFile
   ): Promise<User> {
     const requestUserRole = (request.user as any).role;

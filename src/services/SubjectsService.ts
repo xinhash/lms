@@ -32,11 +32,15 @@ export class SubjectsService {
   async update(id: string, subjectObj: Subject): Promise<Subject | null> {
     const subject = await this.subject.findById(id).exec();
     if (subject) {
+      if (subject.grade.toString() !== subjectObj.grade.toString()) {
+        throw new Error(
+          `Grade can't be updated. If required delete this and create new.`
+        );
+      }
       subject.name = subjectObj.name;
       subject.code = subjectObj.code;
       subject.type = subjectObj.type;
       subject.grade = subjectObj.grade;
-      subject.status = subjectObj.status;
       // subject.format = subjectObj.format;
 
       await subject.save();

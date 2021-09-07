@@ -35,6 +35,6 @@ export class House {
   status: string;
 
   @Ref(User)
-  @Groups("!creation", "!updation")
-  createdBy?: Ref<User>;
+  @Groups("!updation")
+  createdBy: Ref<User>;
 }

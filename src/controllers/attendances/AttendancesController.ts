@@ -2,6 +2,7 @@ import {
   BodyParams,
   Controller,
   Delete,
+  Err,
   Get,
   PathParams,
   Post,
@@ -21,13 +22,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Attendance } from "src/models/attendances/Attendance";
 import { AttendancesService } from "src/services/AttendancesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/attendances")
 export class AttendancesController {
-  constructor(private attendancesService: AttendancesService) {}
+  constructor(
+    private attendancesService: AttendancesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Attendances")
@@ -41,7 +46,7 @@ export class AttendancesController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Attendance based on id")
@@ -60,7 +65,7 @@ export class AttendancesController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Attendance")
@@ -72,18 +77,22 @@ export class AttendancesController {
     @Groups("creation")
     data: Attendance
   ): Promise<Attendance> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
+
     return this.attendancesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Attendance with id")
@@ -96,7 +105,7 @@ export class AttendancesController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Attendance")

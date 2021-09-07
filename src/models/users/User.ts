@@ -35,7 +35,7 @@ enum Roles {
   SUPERADMIN = "superadmin",
   ADMIN = "admin",
   STUDENT = "student",
-  STAFF = "staff"
+  STAFF = "staff",
 }
 
 @Model({ schemaOptions: { timestamps: true } })
@@ -62,23 +62,29 @@ export class User {
   @Email()
   @Unique()
   @Trim()
+  @Example("superadmin@example.com")
   email: string;
 
+  @Groups("!creation")
   @Pattern(/^[6-9]{1}[0-9]{9}$/)
   @Example(9899999999)
   phoneNumber?: number;
 
   @Nullable(Date)
   @Format("date")
+  @Groups("!creation")
   dateOfBirth?: Date | null;
 
+  @Groups("!creation")
   currentAddress?: Address;
 
+  @Groups("!creation")
   permanentAddress?: Address;
 
   @Required()
   @MinLength(4)
   @MaxLength(20)
+  @Example("password")
   password: string;
 
   @Enum(Roles)
@@ -97,14 +103,19 @@ export class User {
   @Default(true)
   isVerified: boolean;
 
+  @Groups("!creation")
   fatherName?: string;
 
+  @Groups("!creation")
   motherName?: string;
 
+  @Groups("!creation")
   socialMediaAccount?: SocialMediaAccount;
 
+  @Groups("!creation")
   photo?: string;
 
+  @Groups("!creation")
   @Enum("male", "female")
   @Default("male")
   gender?: string;

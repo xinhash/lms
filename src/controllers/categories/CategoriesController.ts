@@ -21,13 +21,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Category } from "src/models/categories/Category";
 import { CategoriesService } from "src/services/CategoriesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/categories")
 export class CategoriesController {
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all categories")
@@ -41,7 +45,7 @@ export class CategoriesController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return category based on id")
@@ -60,7 +64,7 @@ export class CategoriesController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new category")
@@ -72,18 +76,21 @@ export class CategoriesController {
     @Groups("creation")
     data: Category
   ): Promise<Category> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
     return this.categoriesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update category with id")
@@ -96,7 +103,7 @@ export class CategoriesController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a category")

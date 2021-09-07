@@ -21,13 +21,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Course } from "src/models/courses/Course";
 import { CoursesService } from "src/services/CoursesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/courses")
 export class CoursesController {
-  constructor(private coursesService: CoursesService) {}
+  constructor(
+    private coursesService: CoursesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Courses")
@@ -41,7 +45,7 @@ export class CoursesController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Course based on id")
@@ -60,7 +64,7 @@ export class CoursesController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Course")
@@ -72,18 +76,21 @@ export class CoursesController {
     @Groups("creation")
     data: Course
   ): Promise<Course> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
     return this.coursesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Course with id")
@@ -96,7 +103,7 @@ export class CoursesController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Course")

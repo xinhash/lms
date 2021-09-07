@@ -21,13 +21,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Medium } from "src/models/mediums/Medium";
 import { MediumsService } from "src/services/MediumsService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/mediums")
 export class MediumsController {
-  constructor(private mediumsService: MediumsService) {}
+  constructor(
+    private mediumsService: MediumsService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Mediums")
@@ -41,7 +45,7 @@ export class MediumsController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Medium based on id")
@@ -60,7 +64,7 @@ export class MediumsController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Medium")
@@ -72,18 +76,21 @@ export class MediumsController {
     @Groups("creation")
     data: Medium
   ): Promise<Medium> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
     return this.mediumsService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Medium with id")
@@ -96,7 +103,7 @@ export class MediumsController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Medium")

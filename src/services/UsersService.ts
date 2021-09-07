@@ -26,7 +26,7 @@ export class UsersService {
     }
   }
 
-  async find(id: User['_id']): Promise<User | null> {
+  async find(id: User["_id"]): Promise<User | null> {
     const user = await this.user.findById(id).exec();
 
     return user;
@@ -34,6 +34,18 @@ export class UsersService {
 
   async findOne(opts = {}): Promise<User | null> {
     const user = await this.user.findOne(opts).exec();
+
+    return user;
+  }
+
+  async findOrCreate(userObj: User): Promise<User> {
+    let user = await this.findOne({
+      email: userObj.email,
+    });
+
+    if (!user) {
+      user = await this.save(userObj);
+    }
 
     return user;
   }

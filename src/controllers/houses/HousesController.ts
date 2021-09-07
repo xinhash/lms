@@ -21,13 +21,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { House } from "src/models/houses/House";
 import { HousesService } from "src/services/HousesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/houses")
 export class HousesController {
-  constructor(private housesService: HousesService) {}
+  constructor(
+    private housesService: HousesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Houses")
@@ -41,7 +45,7 @@ export class HousesController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return House based on id")
@@ -60,7 +64,7 @@ export class HousesController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new House")
@@ -72,18 +76,21 @@ export class HousesController {
     @Groups("creation")
     data: House
   ): Promise<House> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
     return this.housesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update House with id")
@@ -96,7 +103,7 @@ export class HousesController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a House")

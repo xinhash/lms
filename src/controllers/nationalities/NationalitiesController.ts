@@ -21,13 +21,17 @@ import {
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Nationality } from "src/models/nationalities/Nationality";
 import { NationalitiesService } from "src/services/NationalitiesService";
+import { UsersService } from "src/services/UsersService";
 
 @Controller("/nationalities")
 export class NationalitiesController {
-  constructor(private nationalitiesService: NationalitiesService) {}
+  constructor(
+    private nationalitiesService: NationalitiesService,
+    private usersService: UsersService
+  ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all nationalities")
@@ -41,7 +45,7 @@ export class NationalitiesController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return nationality based on id")
@@ -60,7 +64,7 @@ export class NationalitiesController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new nationality")
@@ -72,18 +76,21 @@ export class NationalitiesController {
     @Groups("creation")
     data: Nationality
   ): Promise<Nationality> {
-    if (request.user) {
-      data = { ...data, createdBy: (request.user as any)._id };
+    const user = await this.usersService.find(data.createdBy.toString());
+    if (!user || user.role === "superadmin") {
+      throw new Error(
+        `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
+      );
     }
     return this.nationalitiesService.save(data, {
-      role: (request.user as any).role,
-      _id: (request.user as any)._id,
-      adminId: (request.user as any).adminId,
+      role: user.role,
+      _id: user._id,
+      adminId: user.adminId,
     });
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update nationality with id")
@@ -96,7 +103,7 @@ export class NationalitiesController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a nationality")

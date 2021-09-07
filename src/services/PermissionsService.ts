@@ -18,7 +18,6 @@ interface UserCreated {
 @Service()
 export class PermissionsService {
   @Inject(Permission) private permission: MongooseModel<Permission>;
-  @Inject() private eventEmitter: EventEmitterService;
 
   @OnEvent("entity.created", {})
   async addPermissionsToUser(event: UserCreated) {

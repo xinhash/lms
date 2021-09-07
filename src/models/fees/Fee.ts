@@ -47,9 +47,9 @@ export class Fee {
 
   @Ref(Session)
   @Required()
-  session: Ref<Session>
+  session: Ref<Session>;
 
   @Ref(User)
-  @Groups("!creation", "!updation")
-  createdBy?: Ref<User>;
+  @Groups("!updation")
+  createdBy: Ref<User>;
 }

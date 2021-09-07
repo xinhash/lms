@@ -32,11 +32,15 @@ export class SectionsService {
   async update(id: string, sectionObj: Section): Promise<Section | null> {
     const section = await this.section.findById(id).exec();
     if (section) {
+      if (section.grade.toString() !== sectionObj.grade.toString()) {
+        throw new Error(
+          `Grade can't be updated. If required delete this and create new.`
+        );
+      }
       section.name = sectionObj.name;
       section.status = sectionObj.status;
       section.medium = sectionObj.medium;
       section.noOfStudents = sectionObj.noOfStudents;
-      section.grade = sectionObj.grade;
       await section.save();
 
       return section;

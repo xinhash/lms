@@ -38,7 +38,7 @@ export class SchoolsController {
   ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all schools")
@@ -52,7 +52,7 @@ export class SchoolsController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return school branches based on school id")
@@ -71,28 +71,29 @@ export class SchoolsController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new school")
   @Returns(201, School)
   async createSchool(
     @Req() request: Req,
+    @Required()
     @Description("User model")
     @BodyParams("user")
     @Groups("creation")
     user: User,
+    @Required()
     @Description("School model")
     @BodyParams("school")
     @Groups("creation")
     school: School
   ): Promise<School> {
-    const requestUserRole = (request.user as any).role;
-    if(!user.role) {
-      user.role = "admin"
+    if (!user.role) {
+      user.role = "admin";
     }
     if (user.role !== "admin") {
-      throw new Error("Insufficient permission. Only staffs can be created");
+      throw new Error("Insufficient permission. Only admin can create school");
     }
     if (user.role) {
       const role = await this.rolesService.findOne({ name: user.role });
@@ -104,7 +105,7 @@ export class SchoolsController {
       user.adminId = (request.user as any)._id;
       user.createdBy = (request.user as any)._id;
     }
-    const nuser = await this.usersService.save(user);
+    const nuser = await this.usersService.findOrCreate(user);
     if (!nuser) {
       throw new Error("Unable to create school admin");
     } else {
@@ -121,7 +122,7 @@ export class SchoolsController {
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update school with id")
@@ -134,7 +135,7 @@ export class SchoolsController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a school")
@@ -144,7 +145,7 @@ export class SchoolsController {
   }
 
   @Get("/:id/sessions")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return sessions based on school id")

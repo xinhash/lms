@@ -24,17 +24,13 @@ export class GradesService {
   @OnEvent("subject.created", {})
   async addSubjects(event: SubjectCreated) {
     const grade = event.subject.grade;
-    await this.updateSubjects(grade.toString(), [
-      event.subject.grade.toString(),
-    ]);
+    await this.updateSubjects(grade.toString(), [event.subject._id.toString()]);
   }
 
-  @OnEvent("sections.created", {})
+  @OnEvent("section.created", {})
   async addSections(event: SectionCreated) {
     const grade = event.section.grade;
-    await this.updateSections(grade.toString(), [
-      event.section.grade.toString(),
-    ]);
+    await this.updateSections(grade.toString(), [event.section._id.toString()]);
   }
 
   async find(id: Grade["_id"]): Promise<Grade | null> {
@@ -75,6 +71,7 @@ export class GradesService {
     subjectIds: string[]
   ): Promise<Grade | null> {
     const grade = await this.grade.findById(id).exec();
+    console.log("updateSubjects grade", id, subjectIds, grade);
     if (grade) {
       grade.subjects = grade.subjects
         ? [...grade.subjects, ...subjectIds].filter((x) => x)
@@ -88,13 +85,14 @@ export class GradesService {
 
   async updateSections(
     id: string,
-    subjectIds: string[]
+    sectionIds: string[]
   ): Promise<Grade | null> {
     const grade = await this.grade.findById(id).exec();
+    console.log("updateSections", id, sectionIds, grade);
     if (grade) {
       grade.sections = grade.sections
-        ? [...grade.sections, ...subjectIds].filter((x) => x)
-        : subjectIds;
+        ? [...grade.sections, ...sectionIds].filter((x) => x)
+        : sectionIds;
       await grade.save();
     }
 
