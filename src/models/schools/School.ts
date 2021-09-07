@@ -29,11 +29,11 @@ import { User } from "../users/User";
 
 @Model({ schemaOptions: { timestamps: true } })
 @PreHook("save", async (school: School, next: any) => {
-  if(!school.startedAt) {
-    school.startedAt = tenYearsAgo()
+  if (!school.startedAt) {
+    school.startedAt = tenYearsAgo();
   }
-  if(school.isMainBranch) {
-    school.mainBranch = school._id
+  if (school.isMainBranch) {
+    school.mainBranch = school._id;
   }
   next();
 })
@@ -81,9 +81,9 @@ export class School {
 
   @Ref(User)
   @Groups("!creation", "!updation")
-  createdBy?: Ref<User>;
+  createdBy: Ref<User>;
 
-  adminId?: string
+  adminId?: string;
 
   @Enum("active", "inactive", "suspended", "blocked")
   @Default("active")

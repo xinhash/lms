@@ -163,6 +163,7 @@ export class SchoolsController {
     if (!school) {
       throw new Error(`Unable to find session for school with id: ${id}`);
     } else {
+      const user = await this.usersService.find(school.createdBy.toString());
       const sessions = generateSessions(school.startedAt);
       await Promise.all(
         sessions.map((session) =>
@@ -170,11 +171,12 @@ export class SchoolsController {
             {
               school: school._id,
               name: session,
+              createdBy: school.createdBy,
             },
             {
-              role: (request.user as any).role,
-              _id: (request.user as any)._id,
-              adminId: (request.user as any).adminId,
+              role: user?.role || (request.user as any).role,
+              _id: school.createdBy.toString(),
+              adminId: school.createdBy,
             }
           )
         )
