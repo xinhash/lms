@@ -34,13 +34,6 @@ export class Subject {
   @Enum("theoretical", "practical")
   type: string;
 
-  @Ref(() => Grade)
-  @Required()
-  grade: Ref<Grade>;
-
-  // @Required()
-  // format: string;
-
   @Property()
   @Enum("active", "inactive")
   @Default("active")

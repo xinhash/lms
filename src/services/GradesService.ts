@@ -1,15 +1,15 @@
 import { Service, Inject } from "@tsed/common";
 import { EventEmitterService, OnEvent } from "@tsed/event-emitter";
 import { MongooseModel } from "@tsed/mongoose";
-import mongoose from "mongoose";
 import { Grade } from "src/models/grades/Grades";
+import { GradeSubject } from "src/models/grades/GradesSubjects";
 import { Section } from "src/models/sections/Section";
-import { Subject } from "src/models/subjects/Subject";
 import { objectDefined } from "src/utils";
 import { EntityCreationUser } from "./PermissionsService";
 
 interface SubjectCreated {
-  subject: Subject;
+  subject: GradeSubject["subject"];
+  grade: GradeSubject["grade"];
 }
 
 interface SectionCreated {
@@ -21,10 +21,10 @@ export class GradesService {
   @Inject(Grade) private grade: MongooseModel<Grade>;
   @Inject() private eventEmitter: EventEmitterService;
 
-  @OnEvent("subject.created", {})
+  @OnEvent("subject.mapped", {})
   async addSubjects(event: SubjectCreated) {
-    const grade = event.subject.grade;
-    await this.updateSubjects(grade.toString(), [event.subject._id.toString()]);
+    const grade = event.grade;
+    await this.updateSubjects(grade.toString(), event.subject.toString());
   }
 
   @OnEvent("section.created", {})
@@ -66,16 +66,12 @@ export class GradesService {
     return null;
   }
 
-  async updateSubjects(
-    id: string,
-    subjectIds: string[]
-  ): Promise<Grade | null> {
+  async updateSubjects(id: string, subjectId: string): Promise<Grade | null> {
     const grade = await this.grade.findById(id).exec();
-    console.log("updateSubjects grade", id, subjectIds, grade);
     if (grade) {
       grade.subjects = grade.subjects
-        ? [...grade.subjects, ...subjectIds].filter((x) => x)
-        : subjectIds;
+        ? [...grade.subjects, subjectId].filter((x) => x)
+        : [subjectId];
       await grade.save();
       return grade;
     }

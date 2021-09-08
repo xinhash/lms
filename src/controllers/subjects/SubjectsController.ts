@@ -20,7 +20,6 @@ import {
 } from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { Subject } from "src/models/subjects/Subject";
-import { GradesService } from "src/services/GradesService";
 import { SubjectsService } from "src/services/SubjectsService";
 import { UsersService } from "src/services/UsersService";
 
@@ -28,7 +27,6 @@ import { UsersService } from "src/services/UsersService";
 export class SubjectsController {
   constructor(
     private subjectsService: SubjectsService,
-    private gradesService: GradesService,
     private usersService: UsersService
   ) {}
 
@@ -83,10 +81,6 @@ export class SubjectsController {
       throw new Error(
         `User with id: ${data.createdBy} doesn't exist or is superadmin, use other role.`
       );
-    }
-    const grade = await this.gradesService.find(data.grade.toString());
-    if (!grade) {
-      throw new Error(`Grade with id: ${data.grade} doesn't exist`);
     }
     return this.subjectsService.save(data, {
       role: user.role,
