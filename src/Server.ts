@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import compress from "compression";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
+import session from "express-session";
 import cors from "cors";
 import "@tsed/ajv";
 import "@tsed/swagger";
@@ -16,12 +17,21 @@ import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
 import path from "path";
 import multer from "multer";
+import AdminBro from "admin-bro";
+import AdminBroExpress from "@admin-bro/express";
+
+const adminBro = new AdminBro({
+  databases: [],
+  rootPath: "/admin",
+});
+
+const router = AdminBroExpress.buildRouter(adminBro);
 
 const storage = multer.diskStorage({
   filename: function (_, file, cb) {
-    cb(null, new Date().getTime() + '_' + file.originalname)
+    cb(null, new Date().getTime() + "_" + file.originalname);
   },
-})
+});
 
 @Configuration({
   ...config,
@@ -73,8 +83,8 @@ const storage = multer.diskStorage({
   },
   multer: {
     dest: `${rootDir}/../uploads`,
-    storage
-  }
+    storage,
+  },
 })
 export class Server {
   @Inject()
@@ -94,6 +104,18 @@ export class Server {
         bodyParser.urlencoded({
           extended: true,
         })
-      ); // @ts-ignore
+      )
+      .use(
+        session({
+          secret: process.env.SESSION_SECRET || "secret session",
+          resave: false,
+          saveUninitialized: true,
+          cookie: {
+            secure: true,
+            maxAge: 24 * 60 * 60 * 1000,
+          },
+        })
+      )
+      .use(adminBro.options.rootPath, router);
   }
 }
