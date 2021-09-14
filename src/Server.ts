@@ -15,10 +15,9 @@ import "@tsed/event-emitter"; // import event emitter ts.ed module
 import { config, rootDir } from "./config";
 import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
-import path from "path";
-import multer from "multer";
 import AdminBro from "admin-bro";
 import AdminBroExpress from "@admin-bro/express";
+import multer from "multer";
 
 const adminBro = new AdminBro({
   databases: [],
@@ -27,7 +26,23 @@ const adminBro = new AdminBro({
 
 const router = AdminBroExpress.buildRouter(adminBro);
 
+// const fileFilter = (_, file, cb) => {
+//   if (
+//     file.mimetype.includes("png") ||
+//     file.mimetype.includes("jpeg") ||
+//     file.mimetype.includes("docx") ||
+//     file.mimetype.includes("pdf")
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb("Valid file types to upload: png, jpeg, docx, pdf", false);
+//   }
+// };
+
 const storage = multer.diskStorage({
+  destination: function (_, file, cb) {
+    cb(null, `${rootDir}/../uploads`);
+  },
   filename: function (_, file, cb) {
     cb(null, new Date().getTime() + "_" + file.originalname);
   },

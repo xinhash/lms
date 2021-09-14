@@ -1,5 +1,16 @@
-import { Model, Ref, Schema } from "@tsed/mongoose";
-import { Default, Enum, Format, Integer, Max, Min, Pattern, Property, Required } from "@tsed/schema";
+import { Model, ObjectID, Ref, Schema } from "@tsed/mongoose";
+import {
+  Default,
+  Enum,
+  Format,
+  Groups,
+  Integer,
+  Max,
+  Min,
+  Pattern,
+  Property,
+  Required,
+} from "@tsed/schema";
 import { User } from "./User";
 
 export enum StaffRoles {
@@ -37,6 +48,10 @@ class BankDetails {
 
 @Model({ schemaOptions: { timestamps: true } })
 export class Staff {
+  @Groups("!creation", "!updation")
+  @ObjectID("id")
+  _id: string;
+
   @Ref(User)
   user?: Ref<User>;
 
@@ -58,7 +73,6 @@ export class Staff {
   @Required()
   maritalStatus: string;
 
-  @Required()
   qualifications: string[];
 
   @Required()

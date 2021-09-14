@@ -36,7 +36,7 @@ export class StaffsController {
   ) {}
 
   @Get("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return all Staffs")
@@ -50,7 +50,7 @@ export class StaffsController {
   }
 
   @Get("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Return Staff based on id")
@@ -69,7 +69,7 @@ export class StaffsController {
   }
 
   @Post("/")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Create new Staff")
@@ -77,31 +77,18 @@ export class StaffsController {
   async createStaff(
     @Req() request: Req,
     @BodyParams("user")
-    @Groups("creation")
+    @Groups("staffCreation")
     user: User,
     @Description("Staff model")
     @BodyParams("staff")
     @Groups("creation")
-    staff: Staff,
-    // @MultipartFile("resume") resume: PlatformMulterFile,
-    // @MultipartFile("joiningLetter") joiningLetter: PlatformMulterFile,
-    // @MultipartFile("otherDocuments", 4) otherDocuments: PlatformMulterFile[]
-
+    staff: Staff
   ): Promise<Staff> {
-    // if(!resume || !joiningLetter) {
-    //   throw new Error('Insufficient data. Resume or Joining Letter')
-    // } else {
-    //   staff.resume = resume.path;
-    //   staff.joiningLetter = joiningLetter.path;
-    // }
-    // if(otherDocuments) {
-    //   staff.otherDocuments = otherDocuments.map(doc => doc.path)
-    // }
-
     const requestUserRole = (request.user as any).role;
     if (user.role !== "staff") {
       throw new Error("Insufficient permission. Only staffs can be created");
     }
+    console.log(user.adminId);
     if (requestUserRole === "superadmin" && !user.adminId) {
       throw new Error("Missing field : adminId");
     }
@@ -116,7 +103,7 @@ export class StaffsController {
       user.createdBy = (request.user as any)._id;
     }
     const nuser = await this.usersService.save(user);
-    staff.user = nuser._id
+    staff.user = nuser._id;
     return this.staffsService.save(staff, {
       role: nuser.role,
       _id: nuser._id,
@@ -125,7 +112,7 @@ export class StaffsController {
   }
 
   @Put("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Update Staff with id")
@@ -138,12 +125,45 @@ export class StaffsController {
   }
 
   @Delete("/:id")
-  @Security('oauth_jwt')
+  @Security("oauth_jwt")
   @Authorize("jwt")
   @AcceptRoles("admin")
   @Summary("Remove a Staff")
   @Status(204, { description: "No content" })
   async remove(@PathParams("id") id: string): Promise<void> {
     await this.staffsService.remove(id);
+  }
+
+  @Put("/upload-documents/:id")
+  @Security("oauth_jwt")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
+  @Summary("Upload resume, joining letter and other documents")
+  @Returns(201, Staff)
+  async uploadDocuments(
+    @PathParams("id") @Required() id: string,
+    @MultipartFile("resume") resume: PlatformMulterFile,
+    @MultipartFile("joiningLetter") joiningLetter: PlatformMulterFile,
+    @MultipartFile("otherDocuments", 4) otherDocuments: PlatformMulterFile[]
+  ) {
+    const staff = await this.staffsService.find(id);
+    if (!staff) {
+      throw new Error("Unable to find staff details");
+    }
+    if (!resume || !joiningLetter) {
+      throw new Error("Insufficient data. Resume or Joining Letter");
+    } else {
+      if (resume.originalname === joiningLetter.originalname) {
+        throw new Error("Resume and JoiningLetter name should be different");
+      }
+      staff.resume = `/uploads/${resume.filename}`;
+      staff.joiningLetter = `/uploads/${joiningLetter.filename}`;
+    }
+    if (otherDocuments?.length > 0) {
+      staff.otherDocuments = otherDocuments.map(
+        (doc) => `/uploads/${doc.filename}`
+      );
+    }
+    return this.staffsService.update(id, staff);
   }
 }

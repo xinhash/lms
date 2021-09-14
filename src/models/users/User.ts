@@ -20,6 +20,7 @@ import {
   Optional,
   Pattern,
   Required,
+  RequiredGroups,
 } from "@tsed/schema";
 import { argon2i } from "argon2-ffi";
 import crypto from "crypto";
@@ -48,7 +49,7 @@ enum Roles {
   next();
 })
 export class User {
-  @Groups("!creation", "!updation")
+  @Groups("!creation", "!staffCreation", "!updation")
   @ObjectID("id")
   _id: string;
 
@@ -65,26 +66,26 @@ export class User {
   @Example("superadmin@example.com")
   email: string;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   @Pattern(/^[6-9]{1}[0-9]{9}$/)
   @Example(9899999999)
   phoneNumber?: number;
 
   @Nullable(Date)
   @Format("date")
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   dateOfBirth?: Date | null;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   currentAddress?: Address;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   permanentAddress?: Address;
 
   @Required()
   @MinLength(4)
-  @MaxLength(20)
   @Example("password")
+  @RequiredGroups("!patch")
   password: string;
 
   @Enum(Roles)
@@ -92,7 +93,7 @@ export class User {
   role: string;
 
   @Ref(Role)
-  @Groups("!creation", "!updation")
+  @Groups("!creation", "!staffCreation", "!updation")
   roleId?: Ref<Role>;
 
   @Groups("updation")
@@ -103,25 +104,25 @@ export class User {
   @Default(true)
   isVerified: boolean;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   fatherName?: string;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   motherName?: string;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   socialMediaAccount?: SocialMediaAccount;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   photo?: string;
 
-  @Groups("!creation")
+  @Groups("!creation", "!staffCreation")
   @Enum("male", "female")
   @Default("male")
   gender?: string;
 
   @Ref(() => User)
-  @Groups("!creation", "!updation")
+  @Groups("!creation", "!staffCreation", "!updation")
   createdBy: Ref<User>;
 
   @Ref(() => User)

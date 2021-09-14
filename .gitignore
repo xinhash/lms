@@ -52,3 +52,4 @@ test/**/*.js.map
 /public
 /dist
 .env
+/uploads

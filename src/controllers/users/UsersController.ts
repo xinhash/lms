@@ -1,16 +1,27 @@
 import {
   BodyParams,
   Controller,
+  Delete,
   Get,
   HeaderParams,
   MultipartFile,
+  Patch,
   PathParams,
   PlatformMulterFile,
   Post,
+  Put,
   Req,
 } from "@tsed/common";
 import { Authorize } from "@tsed/passport";
-import { Description, Returns, Summary, Groups, Security } from "@tsed/schema";
+import {
+  Description,
+  Returns,
+  Summary,
+  Groups,
+  Security,
+  Required,
+  Status,
+} from "@tsed/schema";
 import { AcceptRoles } from "src/decorators/AcceptRoles";
 import { CheckPermissions } from "src/decorators/CheckPermissions";
 import { User } from "src/models/users/User";
@@ -98,5 +109,32 @@ export class UsersController {
     //   data.photo = photo.filename
     // }
     return this.usersService.save(data);
+  }
+
+  @Patch("/upload-photo/:id")
+  @Security("oauth_jwt")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
+  @Summary("Upload user photo")
+  @Returns(201, User)
+  async uploadDocuments(
+    @PathParams("id") @Required() id: string,
+    @MultipartFile("photo") photo: PlatformMulterFile
+  ) {
+    const user = await this.usersService.find(id);
+    if (!user) {
+      throw new Error("Unable to find user details");
+    }
+    return this.usersService.uploadPhoto(id, photo.filename);
+  }
+
+  @Delete("/:id")
+  @Security("oauth_jwt")
+  @Authorize("jwt")
+  @AcceptRoles("admin")
+  @Summary("Remove a Department")
+  @Status(204, { description: "No content" })
+  async remove(@PathParams("id") id: string): Promise<void> {
+    await this.usersService.remove(id);
   }
 }

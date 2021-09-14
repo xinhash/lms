@@ -1,8 +1,12 @@
-import { Schema, Trim } from "@tsed/mongoose";
-import { MaxLength, MinLength, Optional, Required } from "@tsed/schema";
+import { ObjectID, Schema, Trim } from "@tsed/mongoose";
+import { Groups, MaxLength, MinLength, Optional, Required } from "@tsed/schema";
 
 @Schema()
 export class Address {
+  @Groups("!creation", "!updation")
+  @ObjectID("id")
+  _id: string;
+
   @Trim()
   name?: string;
 

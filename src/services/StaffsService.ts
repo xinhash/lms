@@ -30,6 +30,7 @@ export class StaffsService {
     if (staff) {
       staff.status = data.status;
       await staff.save();
+      return staff;
     }
     return null;
   }

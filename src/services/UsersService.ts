@@ -63,6 +63,22 @@ export class UsersService {
     return user;
   }
 
+  async update(id: string, userObj: User): Promise<User | null> {
+    const user = await this.user.findById(id).exec();
+    if (user) {
+      console.log(typeof userObj);
+      // userObj.forEach(key => {
+      //   user[key] = userObj[key]
+      // })
+
+      await user.save();
+
+      return user;
+    }
+
+    return null;
+  }
+
   async query(options = {}): Promise<User[]> {
     options = objectDefined(options);
 
@@ -71,6 +87,18 @@ export class UsersService {
 
   async remove(id: string): Promise<User> {
     return await this.user.findById(id).remove().exec();
+  }
+
+  async uploadPhoto(id: string, photo: User["photo"]): Promise<User | null> {
+    const user = await this.user.findById(id).exec();
+    if (user) {
+      user.photo = `/uploads/${photo}`;
+      await user.save();
+
+      return user;
+    }
+
+    return null;
   }
 
   attachToken(user: User, token: string) {
