@@ -15,16 +15,8 @@ import "@tsed/event-emitter"; // import event emitter ts.ed module
 import { config, rootDir } from "./config";
 import { IndexCtrl } from "./controllers/pages/IndexController";
 import { User } from "./models/users/User";
-import AdminBro from "admin-bro";
-import AdminBroExpress from "@admin-bro/express";
 import multer from "multer";
 
-const adminBro = new AdminBro({
-  databases: [],
-  rootPath: "/admin",
-});
-
-const router = AdminBroExpress.buildRouter(adminBro);
 
 // const fileFilter = (_, file, cb) => {
 //   if (
@@ -131,6 +123,5 @@ export class Server {
           },
         })
       )
-      .use(adminBro.options.rootPath, router);
   }
 }

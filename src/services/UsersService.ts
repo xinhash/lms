@@ -66,11 +66,20 @@ export class UsersService {
   async update(id: string, userObj: User): Promise<User | null> {
     const user = await this.user.findById(id).exec();
     if (user) {
-      console.log(typeof userObj);
-      // userObj.forEach(key => {
-      //   user[key] = userObj[key]
-      // })
-
+      user.password = userObj.password;
+      user.username = userObj.username;
+      user.email = userObj.email;
+      user.phoneNumber = userObj.phoneNumber;
+      user.dateOfBirth = userObj.dateOfBirth;
+      user.currentAddress = userObj.currentAddress;
+      user.permanentAddress = userObj.permanentAddress;
+      user.role = userObj.role;
+      user.isActive = userObj.isActive;
+      user.isVerified = userObj.isVerified;
+      user.socialMediaAccount = userObj.socialMediaAccount;
+      user.fatherName = userObj.fatherName;
+      user.motherName = userObj.motherName;
+      user.gender = userObj.gender;
       await user.save();
 
       return user;
